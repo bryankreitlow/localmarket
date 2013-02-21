@@ -1,0 +1,10 @@
+{
+    "name": "LocalMart-Website",
+    "description": "Project with Nate and Bryan",
+    "url": "http://www.localmart.me",
+    "version": "0.0.1",
+    "private": false,
+    "dependencies": {
+        "express.io": ">=1.1.x"
+    }
+}
