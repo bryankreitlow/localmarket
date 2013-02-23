@@ -1,5 +1,7 @@
 #!/bin/bash
 
+echo "Starting Watch Script"
+
 # what repository do we want to watch.
 repository="origin/master"
 serverFile="app.js"
@@ -18,6 +20,9 @@ while [ 1 ]; do
         latest_revision=$current_revision
 
         # restart the node forever.
+        echo "Retrieving New Master Code"
+        `git pull origin master`
+        echo "Restarting forever process"
         `sudo forever restart $serverFile`
 
     fi
