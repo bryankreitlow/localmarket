@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/ksh
 
 echo "Starting Watch Script"
 
@@ -6,8 +6,7 @@ echo "Starting Watch Script"
 LATEST_REVISION="none"
 
 # loop forever, need to kill the process.
-while [ 1 ]
-do
+while [ 1 ]; do
 
     # get the latest revision SHA.
     CURRENT_REVISION=$(git ls-remote git://github.com/bryankreitlow/localmarket.git HEAD)
