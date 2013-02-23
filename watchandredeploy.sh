@@ -3,27 +3,29 @@
 $(echo "Starting Watch Script")
 
 # what repository do we want to watch.
-repository="origin/master"
-serverFile="app.js"
-latest_revision="none"
+REPOSITORY="origin/master"
+SERVERFILE="app.js"
+LATEST_REVISION="none"
 
 # loop forever, need to kill the process.
 while [ 1 ]; do
 
     # get the latest revision SHA.
-    current_revision=$(git rev-parse $repository)
+    CURRENT_REVISION=$(git rev-parse $REPOSITORY)
 
     # if we haven't seen that one yet, then we know there's new stuff.
-    if [ $latest_revision != $current_revision ]; then
+    if [ $LATEST_REVISION != $CURRENT_REVISION ]; then
 
         # mark the newest revision as seen.
-        latest_revision=$current_revision
+        LATEST_REVISION=$CURRENT_REVISION
 
-        # restart the node forever.
-        echo "Retrieving New Master Code"
-        `git pull origin master`
-        echo "Restarting forever process"
-        `sudo forever restart $serverFile`
+        # pull down the latest code
+        $(echo "Retrieving New Master Code")
+        $(git pull origin master)
+
+        # restart the forever process
+        $(echo "Restarting forever process")
+        $(sudo forever restart $SERVERFILE)
 
     fi
     sleep 60
