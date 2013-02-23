@@ -3,15 +3,13 @@
 $(echo "Starting Watch Script")
 
 # what repository do we want to watch.
-REPOSITORY="origin/master"
-SERVERFILE="app.js"
 LATEST_REVISION="none"
 
 # loop forever, need to kill the process.
 while [ 1 ]; do
 
     # get the latest revision SHA.
-    CURRENT_REVISION=$(git rev-parse $REPOSITORY)
+    CURRENT_REVISION=$(git rev-parse origin/master)
 
     # if we haven't seen that one yet, then we know there's new stuff.
     if [ $LATEST_REVISION != $CURRENT_REVISION ]; then
@@ -25,7 +23,7 @@ while [ 1 ]; do
 
         # restart the forever process
         $(echo "Restarting forever process")
-        sudo forever restart "${SERVERFILE}"
+        sudo forever restart app.js
 
     fi
     sleep 60
