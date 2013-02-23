@@ -11,7 +11,7 @@ while [ 1 ]; do
     # get the latest revision SHA.
     CURRENT_REVISION=$(git ls-remote git://github.com/bryankreitlow/localmarket.git HEAD | cut -c 1-40)
     # if we haven't seen that one yet, then we know there's new stuff.
-    if [ "$LATEST_REVISION" != "$CURRENT_REVISION" ]; then
+    if [ $LATEST_REVISION != $CURRENT_REVISION ]; then
 
         # mark the newest revision as seen.
         LATEST_REVISION=$CURRENT_REVISION
@@ -25,6 +25,7 @@ while [ 1 ]; do
         sudo forever restart app.js
 
     fi
+
     sleep 60
 
 done
