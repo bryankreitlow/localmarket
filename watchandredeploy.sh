@@ -1,6 +1,6 @@
 #!/bin/bash
 
-echo "Starting Watch Script"
+$(echo "Starting Watch Script")
 
 # what repository do we want to watch.
 repository="origin/master"
@@ -11,7 +11,7 @@ latest_revision="none"
 while [ 1 ]; do
 
     # get the latest revision SHA.
-    current_revision=`git rev-parse $repository`
+    current_revision=$(git rev-parse $repository)
 
     # if we haven't seen that one yet, then we know there's new stuff.
     if [ $latest_revision != $current_revision ]; then
