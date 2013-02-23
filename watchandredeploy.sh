@@ -21,11 +21,11 @@ while [ 1 ]; do
 
         # pull down the latest code
         $(echo "Retrieving New Master Code")
-        $(git pull origin master)
+        git pull origin master
 
         # restart the forever process
         $(echo "Restarting forever process")
-        $(sudo forever restart $SERVERFILE)
+        sudo forever restart "${SERVERFILE}"
 
     fi
     sleep 60
