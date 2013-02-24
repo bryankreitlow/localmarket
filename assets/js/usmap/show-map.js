@@ -39,4 +39,4 @@
       })(usRaphael[state], state);
     }
             
-  };)
+  })();

@@ -22,9 +22,7 @@ app.get('/', function(req, res) {
 });
 
 app.get('/map', function(req, res){
-    res.render('map', {
-    message: 'Hello World'
-  });
+    res.render('map');
 });
 
 app.io.set('log level', 1);
