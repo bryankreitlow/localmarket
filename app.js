@@ -28,6 +28,10 @@ app.get('/map', function(req, res){
     res.render('map');
 });
 
+app.get('/about', function(req, res){
+  res.render('about');
+});
+
 app.io.set('log level', 1);
 
 app.listen(80);
