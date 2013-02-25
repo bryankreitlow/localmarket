@@ -5,6 +5,9 @@ var app = express().http().io();
 
 app.use("/assets", express.static(__dirname + '/assets'));
 
+//Fav icon
+app.use(express.favicon(__dirname + '/favicon/favicon.ico', { maxAge: 2592000000 }));
+
 app.configure(function() {
   app.set('views', __dirname + '/views');
   app.set('view engine', 'ejs');
