@@ -21,15 +21,15 @@ app.configure(function() {
 });
 
 app.get('/', function(req, res) {
-  res.render('index');
+  res.render('index', { page: 'home' });
 });
 
 app.get('/map', function(req, res){
-    res.render('map');
+    res.render('map', { page: 'map' });
 });
 
 app.get('/about', function(req, res){
-  res.render('about');
+  res.render('about', { page: 'about' });
 });
 
 app.io.set('log level', 1);
