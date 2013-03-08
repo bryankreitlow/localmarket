@@ -30,6 +30,11 @@
           R.safari();
         };
 
+        st[0].onmousedown = function() {
+          var stateLocation = state.toUpperCase();
+          window.location = window.location + '/' + stateLocation;
+        };
+
         st[0].onmouseout = function () {
           st.animate({fill: "#d3d3d3"}, 500);
           st.toFront();
