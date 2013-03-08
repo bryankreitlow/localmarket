@@ -1,5 +1,44 @@
 (function () {
-    var R = Raphael("container", 1000, 900),
+  "use strict";
+  var paper;
+
+  window.ScaleRaphael = function(container, width, height) {
+    var wrapper = document.getElementById(container);
+    wrapper.style.width = width + "px";
+    wrapper.style.height = height + "px";
+    wrapper.style.overflow = "hidden";
+
+    wrapper.innerHTML = "<div id='svggroup'><\/div>";
+    var nestedWrapper = document.getElementById("svggroup");
+
+    paper = new Raphael(nestedWrapper, width, height);
+    paper.w = width;
+    paper.h = height;
+    paper.canvas.setAttribute("viewBox", "0 0 "+width+" "+height);
+    paper.changeSize = function() {
+      var w = window.innerWidth;
+      var h = window.innerHeight;
+      var ratioW = w / width;
+      var ratioH = h / height;
+      var scale = ratioW < ratioH ? ratioW : ratioH;
+
+      var newHeight = Math.floor(height * scale);
+      var newWidth = Math.floor(width * scale);
+
+      wrapper.style.width = newWidth + "px";
+      wrapper.style.height = newHeight + "px";
+      paper.setSize(newWidth, newHeight);
+    };
+    window.onresize = function() {
+      paper.changeSize();
+    };
+
+    paper.changeSize();
+
+    return paper;
+  };
+
+    var R = ScaleRaphael("container", 1000, 900),
       attr = {
       "fill": "#d3d3d3",
       "stroke": "#fff",
