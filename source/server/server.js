@@ -3,7 +3,7 @@
 var path = require('path'),
     config = require('./util/Config'),
     cluster = require('cluster'),
-    reqLogger = require('./util/reqLogger'),
+    reqLogger = require('./util/ReqLogger'),
     logger = require('./util/Logger'),
     _ = require('underscore'),
     express = require('express.io'),

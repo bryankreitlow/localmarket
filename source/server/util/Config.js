@@ -31,7 +31,7 @@ var Config = {
   MessageLogMaxSize:"message_log_max_size",
 
   // relative paths are relative to self.serverRootDir
-  bootstrapPaths:["config"],
+  bootstrapPaths:["config", "/home/ec2-user/conf"],
   bootstrapFiles:["default.json", hostname + ".json"],
 
   ConfigDebug: "debug",
@@ -177,6 +177,10 @@ var Config = {
 
   getMongoDBTable:function() {
     return this.get(this.MongoDBTable);
+  },
+
+  getMongoDBConnectionString: function() {
+    return "mongodb://" + this.get(this.MongoDBUser) + ":" + this.get(this.MongoDBPassword) + "@" + this.getMongoDBHost() + "/" + this.getMongoDBTable();
   }
 };
 
