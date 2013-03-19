@@ -1,0 +1,17 @@
+{
+  "configuration": "development",
+
+  "node_server_port": 80,
+  "node_cluster_size": 2,
+
+  "access_log": null,
+  "access_log_max_size": 10000000,
+  "message_log": "<console>",
+  "message_log_max_size": 10000000,
+
+  "dbuser": "XXX",
+  "dbpassword": "XXX",
+  "dbhost": "dbh86.mongolab.com",
+  "dbport": 27867,
+  "dbtable": "localmart"
+}
