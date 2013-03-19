@@ -7,7 +7,7 @@ var app = express().http().io();
 
 var stateList = require('./../../components/StateList');
 
-app.use("/assets", express.static('static/assets'));
+app.use("/assets", express.static('../../static/assets'));
 
 //Fav icon
 app.use(express.favicon(__dirname + '/favicon/favicon.ico', { maxAge: 2592000000 }));

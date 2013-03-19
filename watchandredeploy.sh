@@ -21,7 +21,7 @@ while [ 1 ]; do
 
         # restart the forever process
         echo "Restarting forever process"
-        sudo forever restart source/server/server.js
+        sudo forever restart server.js
     fi
     sleep 60
 done
