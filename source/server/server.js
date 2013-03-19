@@ -5,9 +5,9 @@ var express = require('express.io'),
 
 var app = express().http().io();
 
-var stateList = require('./components/StateList');
+var stateList = require('./../../components/StateList');
 
-app.use("/assets", express.static(__dirname + '/assets'));
+app.use("/assets", express.static('static/assets'));
 
 //Fav icon
 app.use(express.favicon(__dirname + '/favicon/favicon.ico', { maxAge: 2592000000 }));
@@ -26,6 +26,10 @@ app.configure(function() {
 
 app.get('/', function(req, res) {
   res.render('index', { page: 'home' });
+});
+
+app.get('/mapNew', function(req, res){
+  res.render('googleMap', { page: 'map' });
 });
 
 app.get('/map', function(req, res){
