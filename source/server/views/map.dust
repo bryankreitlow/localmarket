@@ -1,6 +1,6 @@
-﻿{>"layout"/}
+{>"core/layout"/}
 
-{<title}About | LocalMart{/title}
+{<title}Map | LocalMart{/title}
 
 {<scripts}
   <script src="assets/js/usmap/raphael-min.js"></script>

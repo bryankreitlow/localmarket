@@ -1,4 +1,4 @@
-{>"layout"/}
+{>"core/layout"/}
 
 {<title}State | LocalMart{/title}
 
@@ -10,5 +10,4 @@
     <div id="container" style="padding-top: 30px;"></div>
     </div>
 </div>
-<script src="/assets/js/usmap/raphael-min.js"></script>
 {/content}

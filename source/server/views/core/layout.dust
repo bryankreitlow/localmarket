@@ -1,4 +1,4 @@
-﻿{!
+{!
 The base layout template for the new Sococo marketing site.
 
 This template is meant to be the base for individual page
@@ -9,7 +9,7 @@ to make basic pages a breeze to implement.
 Here's an example of how to implement your own page based
 on this layout, while overriding most of the base content.
 
-{>"layout"/}
+{>"core/layout"/}
 
 {<title}LocalMart | About Us{/title}
 
@@ -32,49 +32,48 @@ on this layout, while overriding most of the base content.
 
 !}
 <!DOCTYPE html>
-<!--[if lt IE 7]><html class="no-js lt-ie9 lt-ie8 lt-ie7"><![endif]-->
-<!--[if IE 7]><html class="no-js lt-ie9 lt-ie8"><![endif]-->
-<!--[if IE 8]><html class="no-js lt-ie9"><![endif]-->
-<!--[if gt IE 8]><!--><html class="no-js"><!--<![endif]-->
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
 <head>
-  <meta charset="utf-8">
-  <title>
-    {+title}LocalMart | Eat Local, Buy Local{/title}
-  </title>
+<meta charset="utf-8">
+<title>
+{+title}LocalMart | Eat Local, Buy Local{/title}
+</title>
 
-  {!
-  Viewport meta tags are needed to ensure scroll bar don't show up on
-  mobile devices.
-  !}
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="author" content="LocalMart">
-  <meta name="description" content="Eat local, Buy Local">
-  <meta name="keywords" content="local food">
-  {! If you've got custom head meta tags, you can specify them here!}
-  {+meta}
-  {/meta}
-  <link href="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.2/css/bootstrap-combined.min.css" rel="stylesheet">
-  <style type="text/css">
-    .navbar .brand { max-height: 40px; overflow: visible;padding-top: 0;padding-bottom: 0; }
-  </style>
-  {+styles}
-  {/styles}
+{!
+Viewport meta tags are needed to ensure scroll bar don't show up on
+mobile devices.
+!}
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="author" content="LocalMart">
+<meta name="description" content="Eat local, Buy Local">
+<meta name="keywords" content="local food">
+{! If you've got custom head meta tags, you can specify them here!}
+{+meta}
+{/meta}
+<link href="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.2/css/bootstrap-combined.min.css" rel="stylesheet">
+<style type="text/css">
+.navbar .brand { max-height: 40px; overflow: visible;padding-top: 0;padding-bottom: 0; }
+</style>
+{+styles}
+{/styles}
 </head>
 <body>
 {! Header view default !}
 {+header}
-{>"header"/}
+{>"core/header"/}
 {/header}
 
 {! Body content !}
 <div class="container-fluid">
 {+content}
 {/content}
-</div>
 
 {! Footer view default !}
 {+footer}
-{>"footer"/}
+{>"core/footer"/}
 {/footer}
 
 <script src="http://code.jquery.com/jquery-1.8.2.js"></script>
@@ -92,5 +91,6 @@ honest, if you're using IE7, you're debugging a problem.
 <script type="text/javascript" src="https://getfirebug.com/firebug-lite.js"></script>
 <![endif]-->
 {/debug}
+</div>
 </body>
 </html>

@@ -1,4 +1,4 @@
-<div class="navbar navbar-inverse navbar-top" style="margin-bottom: 0px !important;">
+<div class="navbar navbar-inverse navbar-top" style="margin-bottom: 0 !important;">
   <div class="navbar-inner">
     <div class="container" style="padding-bottom: 10px;">
       <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
