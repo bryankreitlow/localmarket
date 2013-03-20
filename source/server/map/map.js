@@ -23,7 +23,7 @@ module.exports = function(app) {
     if(stateName === undefined ) {
       res.send(403, 'Sorry! This does not appear to be a valid state.');
     } else {
-      res.render('state', { page: 'map', state: stateName });
+      res.render('state', { state: stateName });
     }
   });
 

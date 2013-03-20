@@ -37,6 +37,23 @@ var ContributorSchema = new mongoose.Schema({
   }
 });
 
+ContributorSchema.pre('save', function(next){
+  this.dateModified = new Date();
+  if ( !this.dateCreated ) {
+    this.dateCreated = new Date();
+  }
+  next();
+});
+
+var listContributors = ContributorSchema.methods.listContributors = function (cb) {
+  return mongoose.model('Contributor').find().select("name location dateCreated capability").exec(cb);
+};
+
 mongoose.model('Contributor', ContributorSchema);
 
-module.exports = mongoose.model('Contributor');
+module.exports = {
+  Model: mongoose.model('Contributor'),
+  Methods: {
+    listContributors: listContributors
+  }
+}

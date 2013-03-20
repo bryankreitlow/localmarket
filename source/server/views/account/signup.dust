@@ -1,0 +1,56 @@
+{>"core/layout"/}
+
+{<title}Sign Up | LocalMart{/title}
+
+{<content}
+<!-- Main hero unit for a primary marketing message or call to action -->
+<div class="row-fluid" style="padding-top: 20px;">
+  <div class="span6 offset2">
+    <h2>Sign Up</h2>
+    <form method="post">
+      <div class="controls-row">
+        <div class="control-group span6">
+          <label class="control-label">
+            <span>First Name</span>
+            <input class="span12" type="text" name="first">
+          </label>
+          <span class="help-block hide"></span>
+        </div>
+        <div class="control-group span6">
+          <label class="control-label">
+            <span>Last Name</span>
+            <input class="span12" type="text" name="last">
+          </label>
+          <span class="help-block hide"></span>
+        </div>
+      </div>
+      <div class="controls-row">
+        <div class="control-group">
+          <label class="span12 control-label">
+            <span>Email</span>
+            <input class="span12" type="text" name="email">
+          </label>
+          <span class="help-block hide"></span>
+        </div>
+      </div>
+      <div class="controls-row">
+        <div class="control-group">
+          <label class="span6 control-label">
+          <span>Password</span>
+            <input class="span12" type="password" name="password" >
+          </label>
+          <label class="span6 control-label">
+            <span>Re-type Password</span>
+            <input class="span12" type="password" >
+          </label>
+          <span class="help-block hide"></span>
+        </div>
+      </div>
+      <div class="controls-row create-row">
+        <button class="span4 btn-create btn btn-large btn-primary" type="submit">Sign Up</button>
+      </div>
+      </form>
+  </div>
+
+</div>
+{/content}

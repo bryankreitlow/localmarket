@@ -1,0 +1,29 @@
+{>"core/layout"/}
+
+{<title}Account List | LocalMart{/title}
+
+{<content}
+<!-- Main hero unit for a primary marketing message or call to action -->
+<div class="row-fluid" style="padding-top: 20px;">
+  <table class="table table-bordered">
+    <thead>
+      <tr>
+        <td><b>Account Name</b></td>
+        <td><b>Creation Date</b></td>
+        <td><b>Type</b></td>
+      </tr>
+    </thead>
+    <tbody>
+      {#accounts}
+      <tr id="{id}">
+        <td>{name.last}, {name.first}</td>
+        <td>{dateCreated}</td>
+        <td>{capability}{~n}</td>
+      </tr>
+      {:else}
+      <p>There are no accounts!</p>
+    {/accounts}
+    </tbody>
+  </table>
+</div>
+{/content}
