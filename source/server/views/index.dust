@@ -1,5 +1,8 @@
-﻿<% layout('layout') -%>
-<!-- Main hero unit for a primary marketing message or call to action -->
+﻿{>"layout"/}
+
+{<title}LocalMart{/title}
+
+{<content}
 <div class="hero-unit">
 <h1>Welcome to Localmart!</h1>
 <p>This page is currently in the works and will be coming soon with a variety of features to help you find local food.</p>
@@ -24,3 +27,4 @@
 </div>
 </div>
 <hr>
+{/content}
