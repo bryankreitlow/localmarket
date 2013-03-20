@@ -1,0 +1,13 @@
+{>"layout"/}
+
+{<title}About | LocalMart{/title}
+
+{<content}
+  <!-- Main hero unit for a primary marketing message or call to action -->
+  <div class="row-fluid" style="padding-top: 20px;">
+  <div class="hero-unit">
+  <h2>About Localmart</h2>
+  <p>Localmart was started in Eugene, OR early 2013.  It is a combination of ideas between the founders that focus on local ingredients and recipes that help identify the dishes that can be made right now.  The goal is to create a community experience where people share recipes and begin to think local while supporting local farmers.</p>
+  </div>
+  </div>
+{/content}

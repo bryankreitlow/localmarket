@@ -12,6 +12,7 @@ module.exports = function(app) {
   app.get('/map', function(req, res){
     res.render('map', { page: 'map' });
   });
+
   app.get('/map/', function(req, res){
     res.render('map', { page: 'map' });
   });

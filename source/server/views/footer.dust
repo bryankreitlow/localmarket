@@ -1,0 +1,15 @@
+<div class="container-fluid">
+  <footer>
+    <div class="footer">
+      <div class="container narrow row-fluid">
+        <div class="span4">
+          <p>© LocalMart 2013</p>
+        </div>
+        <div class="span3">
+        </div>
+        <div class="span5">
+        </div>
+      </div>
+    </div>
+  </footer>
+</div>

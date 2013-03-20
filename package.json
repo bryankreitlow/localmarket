@@ -15,6 +15,7 @@
       "dustjs-linkedin": ">=1.2.0",
       "dustjs-helpers": ">=1.1.1",
       "winston": "0.6.2",
-      "request": "2.14.0"
+      "request": "2.14.0",
+      "mongoose-types": "1.0.3"
     }
 }

@@ -60,11 +60,9 @@ var Config = {
   },
 
   pathIsAbsolute: function(path) {
-    return path.charAt(0) === "/"
-      // windows \path
-      || (path.length >= 1 && path.charAt(0) === '\\')
-      // windows x:\path
-      || (path.length >= 3 && (path.charAt(1) === ":" && (path.charAt(2) === '\\' || path.charAt(2) === '/')));
+    // windows \path
+    return path.charAt(0) === "/" || (path.length >= 1 && path.charAt(0) === '\\') || (path.length >= 3 && (path.charAt(1) === ":" && (path.charAt(2) === '\\' || path.charAt(2) === '/')));
+    // windows x:\path
   },
 
   // Loads (or reload) the configuration settings
@@ -184,4 +182,4 @@ var Config = {
   }
 };
 
-exports = module.exports = Config;
+module.exports = Config;
