@@ -2,23 +2,26 @@
 
 var Contributor = require('../../models/Contributor').Model;
 var listContributors = require('../../models/Contributor').Methods.listContributors;
+var buildPageContext = require('../utils/ContextUtil').buildPageContext;
 var _ = require('underscore');
 
-module.exports = function(app, passport, auth) {
+module.exports = function(app, sharedContext, passport, auth) {
   "use strict";
 
   app.get('/accounts', function(req, res){
+    var query = req.query;
+    console.log(query);
     listContributors(function(err, accounts) {
       if(err) {
         res.send(404);
       } else {
-        res.render('account/list', {accounts: accounts});
+        res.render('account/list', buildPageContext(req,{accounts: accounts}, sharedContext));
       }
     });
   });
 
   app.get('/login', function(req, res) {
-    res.render('account/login', req.flash());
+    res.render('account/login', buildPageContext(req, req.flash(), sharedContext));
   });
 
   app.post('/login', passport.authenticate('local', {failureRedirect: '/login', failureFlash: 'Invalid email or password.'}), function(req, res) {
@@ -31,11 +34,11 @@ module.exports = function(app, passport, auth) {
   });
 
   app.get('/profile', auth.requiresLogin, function(req, res) {
-    res.render('account/profile', {user: req.user});
+    res.render('account/profile', buildPageContext(req, {user: req.user}, sharedContext));
   });
 
   app.get('/account/signup', function(req, res){
-    res.render('account/signup');
+    res.render('account/signup', buildPageContext(req, sharedContext));
   });
 
   app.post('/account/signup', function(req, res) {

@@ -7,6 +7,7 @@
     "dependencies": {
       "express.io": "1.1.9",
       "mongoose": "3.6.0",
+      "bcrypt": "0.7.5",
       "underscore":"1.4.4",
       "backbone":"1.0.0",
       "backbone-validation":"0.7.1",

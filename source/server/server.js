@@ -52,6 +52,11 @@ var workerOnExit = function(code, signal) {
   }
 };
 
+// Initialize a shared viewContext
+var sharedContext = {
+  isProduction: config.isProduction()
+};
+
 // Initialize the db connection before starting the app
 dbconnect.initialize(function(result, mongoose) {
   "use strict";
@@ -74,8 +79,9 @@ dbconnect.initialize(function(result, mongoose) {
       }
     } else {
       var app = express().http().io(),
-        map = require('./map/map'),
+        mapRoutes = require('./routes/map/map'),
         accountRoutes = require('./routes/account/Accounts'),
+        marketingRoutes = require('./routes/marketing/Marketing'),
         dust = require('dustjs-linkedin'),
         dustHelpers = require('dustjs-helpers');
 
@@ -94,26 +100,9 @@ dbconnect.initialize(function(result, mongoose) {
       //Configure Server
       configExpress(app, config, passport);
 
-      map(app);
-      accountRoutes(app, passport, auth);
-
-      app.get('/', function(req, res) {
-        var userName = false;
-        if(req.user) {
-          userName = req.user.fullName();
-          console.log(userName);
-        }
-        res.render('index', { page: 'home', userName: userName });
-      });
-
-      app.get('/about', function(req, res){
-        var userName = false;
-        if(req.user) {
-          userName = req.user.fullName();
-          console.log(userName);
-        }
-        res.render('about', { page: 'about', userName: userName });
-      });
+      mapRoutes(app, sharedContext);
+      accountRoutes(app, sharedContext, passport, auth);
+      marketingRoutes(app, sharedContext);
 
       app.io.set('log level', 1);
 
