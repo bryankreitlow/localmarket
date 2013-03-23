@@ -1,0 +1,13 @@
+{>"core/layout"/}
+
+{<title}Account Profile | LocalMart{/title}
+
+{<content}
+<div class="row-fluid" style="padding-top: 20px;">
+  <h1>Account Profile</h1>
+  {#user}
+    <span class="label">Full Name</span>{name.first} {name.last}<br/>
+    <span class="label">Email Address</span>{email}
+  {/user}
+</div>
+{/content}

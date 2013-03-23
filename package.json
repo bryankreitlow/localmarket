@@ -17,6 +17,9 @@
       "request": "2.14.0",
       "mongoose-types": "1.0.3",
       "mongoose-timestamp": "0.1.0",
-      "passport": "0.1.16"
+      "passport": "0.1.16",
+      "passport-local": "0.1.6",
+      "connect-mongo": "0.3.2",
+      "connect-flash": "0.1.0"
     }
 }

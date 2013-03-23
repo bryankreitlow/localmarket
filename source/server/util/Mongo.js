@@ -4,6 +4,7 @@
 var config = require('./Config');
 var logger = require("./Logger");
 var mongoose = require('mongoose');
+mongoose.set('debug', true);
 var LogCategory = "Mongo";
 
 var Mongo = {

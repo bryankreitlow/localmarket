@@ -2,6 +2,7 @@
 "use strict";
 
 var mongoose = require('mongoose');
+var timestamps = require('mongoose-timestamp');
 var mongooseTypes = require("mongoose-types");
 mongooseTypes.loadTypes(mongoose);
 
@@ -11,7 +12,8 @@ var ContributorSchema = new mongoose.Schema({
   email: {
     type: Email,
     index: true,
-    required: true
+    required: true,
+    unique: true
   },
   capability: { // [user, moderator, admin]
     type: String,
@@ -25,28 +27,36 @@ var ContributorSchema = new mongoose.Schema({
     first: String,
     last: String
   },
-  dateCreated: {
-    type: Date
+  preferences: {
+    type: mongoose.Schema.Types.Mixed
   },
-  dateModified: {
-    type: Date
-  },
+  entries: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Entry'
+  }],
+  following: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Contributor'
+  }],
   location: {
     type: [Number],
     index: '2d'
   }
 });
 
-ContributorSchema.pre('save', function(next){
-  this.dateModified = new Date();
-  if ( !this.dateCreated ) {
-    this.dateCreated = new Date();
+ContributorSchema.plugin(timestamps);
+
+ContributorSchema.methods = {
+  authenticate: function(plainText) {
+    return plainText === this.password;
+  },
+  fullName: function() {
+    return this.name.first + ' ' + this.name.last;
   }
-  next();
-});
+};
 
 var listContributors = ContributorSchema.methods.listContributors = function (cb) {
-  return mongoose.model('Contributor').find().select("name location dateCreated capability").exec(cb);
+  return mongoose.model('Contributor').find().select("name location createdAt capability").exec(cb);
 };
 
 mongoose.model('Contributor', ContributorSchema);
@@ -56,4 +66,4 @@ module.exports = {
   Methods: {
     listContributors: listContributors
   }
-}
+};

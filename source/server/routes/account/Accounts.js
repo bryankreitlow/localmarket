@@ -1,10 +1,10 @@
 /*jslint node:true, es5:true */
 
-var Contributor = require('../models/Contributor').Model;
-var listContributors = require('../models/Contributor').Methods.listContributors;
+var Contributor = require('../../models/Contributor').Model;
+var listContributors = require('../../models/Contributor').Methods.listContributors;
 var _ = require('underscore');
 
-module.exports = function(app) {
+module.exports = function(app, passport, auth) {
   "use strict";
 
   app.get('/accounts', function(req, res){
@@ -17,19 +17,21 @@ module.exports = function(app) {
     });
   });
 
-  app.post('/login', function(req, res) {
-    console.log(req.body);
-    res.end('Test');
+  app.get('/login', function(req, res) {
+    res.render('account/login', req.flash());
   });
 
-  app.get('/account/info/:email', function(req, res){
-    Contributor.find({email: req.params.email}).exec(function(err, accounts) {
-      if(err) {
-        res.send(404);
-      } else {
-        res.end(JSON.stringify(accounts));
-      }
-    });
+  app.post('/login', passport.authenticate('local', {failureRedirect: '/login', failureFlash: 'Invalid email or password.'}), function(req, res) {
+    res.redirect('/');
+  });
+
+  app.get('/logout', function(req, res) {
+    req.logout();
+    res.redirect('/');
+  });
+
+  app.get('/profile', auth.requiresLogin, function(req, res) {
+    res.render('account/profile', {user: req.user});
   });
 
   app.get('/account/signup', function(req, res){

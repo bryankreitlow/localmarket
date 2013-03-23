@@ -17,7 +17,7 @@
       {#accounts}
       <tr id="{id}">
         <td>{name.last}, {name.first}</td>
-        <td>{dateCreated}</td>
+        <td>{createdAt}</td>
         <td>{capability}{~n}</td>
       </tr>
       {:else}

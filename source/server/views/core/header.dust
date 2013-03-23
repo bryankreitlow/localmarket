@@ -6,7 +6,7 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="brand" href="#"><img src="/assets/images/logo/logo.png" style="width:349px; margin-top: -23px;"></a>
+      <a class="brand" href="/"><img src="/assets/images/logo/logo.png" style="width:349px; margin-top: -23px;"></a>
       <div class="nav-collapse collapse">
         <ul class="nav">
           <li><a href="/">Home</a></li>
@@ -19,12 +19,23 @@
               <li><a href="/plantingguide"><i class="icon-list-alt"></i> Planting Guide</a></li>
             </ul>
           </li>
+          {?userName}
+          <li><a href="/profile">Profile</a></li>
+          <li><a href="/logout">Logout</a></li>
+          {:else}
+          <li class="divider-vertical"></li>
+          <li class="dropdown">
+            <a class="dropdown-toggle" href="#" data-toggle="dropdown">Sign In <strong class="caret"></strong></a>
+            <div class="dropdown-menu" style="padding: 15px; ">
+              <form class="navbar-form pull-right" method="post" action="/login">
+                <input class="span2" name="email" type="text" placeholder="Email">
+                <input class="span2" name="password" type="password" placeholder="Password">
+                <button type="submit" class="btn">Sign in</button>
+              </form>
+            </div>
+          </li>
+          {/userName}
         </ul>
-        <form class="navbar-form pull-right" method="post" action="/login">
-          <input class="span2" name="email" type="text" placeholder="Email">
-          <input class="span2" name="password" type="password" placeholder="Password">
-          <button type="submit" class="btn">Sign in</button>
-        </form>
       </div>
     </div>
   </div>

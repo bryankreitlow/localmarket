@@ -1,0 +1,32 @@
+{>"core/layout"/}
+
+{<title}Account List | LocalMart{/title}
+
+{<content}
+<div class="row-fluid" style="padding-top: 20px;">
+  {error}
+  <form method="post">
+    <div class="controls-row">
+      <div class="control-group">
+        <label class="span12 control-label">
+          <span>Email</span>
+          <input class="span12" type="text" name="email">
+        </label>
+        <span class="help-block hide"></span>
+      </div>
+    </div>
+    <div class="controls-row">
+      <div class="control-group">
+        <label class="span12 control-label">
+          <span>Password</span>
+          <input class="span12" type="password" name="password" >
+        </label>
+        <span class="help-block hide"></span>
+      </div>
+    </div>
+    <div class="controls-row create-row">
+      <button class="span4 btn-create btn btn-large btn-primary" type="submit">Login</button>
+    </div>
+  </form>
+</div>
+{/content}

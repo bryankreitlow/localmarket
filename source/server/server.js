@@ -2,12 +2,15 @@
 
 var path = require('path'),
     config = require('./util/Config'),
+    configExpress = require('./util/ExpressConfig'),
     dbconnect = require('./util/Mongo'),
     cluster = require('cluster'),
     reqLogger = require('./util/ReqLogger'),
     logger = require('./util/Logger'),
     _ = require('underscore'),
-    express = require('express.io');
+    express = require('express.io'),
+    passport = require('passport'),
+    auth = require('./util/middleware/authorization');
 
 // Set this to true if you don't want the cluster to run.
 var debugEnv = false || process.env.NODE_ENV === "debug";
@@ -72,10 +75,9 @@ dbconnect.initialize(function(result, mongoose) {
     } else {
       var app = express().http().io(),
         map = require('./map/map'),
-        accounts = require('./account/Accounts'),
+        accountRoutes = require('./routes/account/Accounts'),
         dust = require('dustjs-linkedin'),
-        dustHelpers = require('dustjs-helpers'),
-        consolidate = require('consolidate');
+        dustHelpers = require('dustjs-helpers');
 
       var serverPort = config.get(config.NodeServerPort);
 
@@ -86,32 +88,31 @@ dbconnect.initialize(function(result, mongoose) {
         accessLogMaxSize: config.get(config.AccessLogMaxSize)
       });
 
-      //Fav icon
-      app.use(express.favicon('../../favicon/favicon.ico', { maxAge: 2592000000 }));
+      // Configure passport
+      require('./util/Passport')(passport);
 
       //Configure Server
-      app.configure(function() {
-        app.set('views', 'views');
-        app.set('view engine', 'dust');
-        app.set("view options", { layout: "layout" });
-        app.engine('dust', consolidate.dust);
-        app.use(express.logger('dev'));
-        app.use(express.cookieParser());
-        app.use(express.bodyParser());
-        app.use(app.router);
-      });
-
-      app.use("/assets", express.static('../../static/assets'));
+      configExpress(app, config, passport);
 
       map(app);
-      accounts(app);
+      accountRoutes(app, passport, auth);
 
       app.get('/', function(req, res) {
-        res.render('index', { page: 'home' });
+        var userName = false;
+        if(req.user) {
+          userName = req.user.fullName();
+          console.log(userName);
+        }
+        res.render('index', { page: 'home', userName: userName });
       });
 
       app.get('/about', function(req, res){
-        res.render('about', { page: 'about' });
+        var userName = false;
+        if(req.user) {
+          userName = req.user.fullName();
+          console.log(userName);
+        }
+        res.render('about', { page: 'about', userName: userName });
       });
 
       app.io.set('log level', 1);
