@@ -117,6 +117,10 @@ ContributorSchema.methods = {
   },
   fullName: function() {
     return this.name.first + ' ' + this.name.last;
+  },
+  setLocation: function(locArray, cb) {
+    var updates = { $set: {location: locArray}};
+    return this.update(updates, cb);
   }
 };
 ContributorSchema.statics.getAuthenticated = function(email, password, cb) {

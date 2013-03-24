@@ -3,7 +3,7 @@
 {<title}Sign Up | LocalMart{/title}
 
 {<styles}
-<link href="/assets/css/colorpicker.css" rel="stylesheet">
+<link href="/assets/css/colorpicker.css" rel="stylesheet"/>
 {/styles}
 {<scripts}
 <script src="/assets/js/colorpicker/bootstrap-colorpicker.js"></script>

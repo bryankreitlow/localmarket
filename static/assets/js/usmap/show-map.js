@@ -71,7 +71,7 @@
 
         st[0].onmousedown = function() {
           var stateLocation = state.toUpperCase();
-          window.location = window.location + '/' + stateLocation;
+          window.location = 'http://' + window.location.host + '/map/' + stateLocation;
         };
 
         st[0].onmouseout = function () {

@@ -41,6 +41,21 @@ module.exports = function(app, sharedContext, passport, auth) {
     res.render('account/profile', buildPageContext(req, {user: req.user}, sharedContext));
   });
 
+  app.post('/account/updateLocation', function(req, res){
+    var body = req.body;
+    if(req.user) {
+      req.user.setLocation([body.lat, body.long], function(err) {
+        if(err) {
+          res.send(404);
+        }
+        res.send(200);
+      });
+    } else {
+      req.session.location = {lat: body.lat, long: body.long};
+      res.send(200);
+    }
+  });
+
   app.get('/account/signup', function(req, res){
     res.render('account/signup', buildPageContext(req, sharedContext));
   });
