@@ -48,9 +48,16 @@ var ContributorSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Contributor'
   }],
+  followers: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Contributor'
+  }],
   location: {
     type: [Number],
     index: '2d'
+  },
+  creationDate: {
+    type: Date
   }
 });
 // Enum on model to manage failed login reasons
@@ -175,8 +182,10 @@ ContributorSchema.statics.getAuthenticated = function(email, password, cb) {
   });
 };
 
-var listContributors = ContributorSchema.methods.listContributors = function (cb) {
-  return mongoose.model('Contributor').find().select("name location createdAt capability").exec(cb);
+var listContributors = ContributorSchema.methods.listContributors = function (options, cb) {
+  var sort = options.sort;
+  var order = (options.order === 'desc') ? '-' : '+';
+  return mongoose.model('Contributor').find().sort(order + sort).select("name location creationDate capability color").exec(cb);
 };
 
 mongoose.model('Contributor', ContributorSchema);

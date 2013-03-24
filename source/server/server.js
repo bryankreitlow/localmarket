@@ -85,6 +85,8 @@ dbconnect.initialize(function(result, mongoose) {
         mapRoutes = require('./routes/map/map'),
         accountRoutes = require('./routes/account/Accounts'),
         marketingRoutes = require('./routes/marketing/Marketing'),
+        entryRoutes = require('./routes/entries/Entries'),
+        suggestionRoutes = require('./routes/marketing/Suggestions'),
         dust = require('dustjs-linkedin'),
         dustHelpers = require('dustjs-helpers');
 
@@ -105,6 +107,8 @@ dbconnect.initialize(function(result, mongoose) {
 
       mapRoutes(app, sharedContext);
       accountRoutes(app, sharedContext, passport, auth);
+      entryRoutes(app, sharedContext, passport, auth);
+      suggestionRoutes(app, sharedContext, passport, auth);
       marketingRoutes(app, sharedContext);
 
       app.io.set('log level', 1);

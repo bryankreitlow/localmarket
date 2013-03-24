@@ -7,12 +7,18 @@ var timestamps = require('mongoose-timestamp');
 
 var EntrySchema = new mongoose.Schema({
   _contributor: {
-    type: ObjectId,
+    type: mongoose.Schema.Types.ObjectId,
     ref: 'Contributor'
   },
-  name: {
+  title: {
     type: String,
-    index: true
+    index: true,
+    required: true
+  },
+  type: {
+    type: String,
+    index: true,
+    required: true
   }
 });
 
@@ -20,4 +26,17 @@ EntrySchema.plugin(timestamps);
 
 mongoose.model('Entry', EntrySchema);
 
-module.exports = mongoose.model('Entry');
+var listEntries = EntrySchema.methods.listEntries = function (options, cb) {
+  var type = options.type;
+  var sort = options.sort;
+  var order = (options.order === 'desc') ? '-' : '+';
+  return mongoose.model('Entry').find().populate('_contributor', 'name').sort(order + sort).select("title type _contributor").exec(cb);
+};
+
+
+module.exports = {
+  Model: mongoose.model('Entry'),
+  Methods: {
+    listEntries: listEntries
+  }
+};

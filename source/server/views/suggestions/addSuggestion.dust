@@ -1,0 +1,37 @@
+{>"core/layout"/}
+
+{<title}Add Suggestions | LocalMart{/title}
+
+{<content}
+<div class="row-fluid" style="padding-top: 20px;">
+  <div class="span6 offset2">
+    <h2>Add a Suggestion</h2>
+    <form method="post">
+      <div class="controls-row">
+        <div class="control-group span6">
+          <label class="control-label">
+            <span>Title</span>
+            <input class="span12" type="text" name="title">
+          </label>
+          <span class="help-block hide"></span>
+        </div>
+      </div>
+      <div class="controls-row">
+        <div class="control-group span12">
+          <div class="control-group">
+            <label class="control-label" for="textarea">Description</label>
+            <div class="controls">
+              <textarea class="input-xlarge" id="textarea" name="description" rows="3"></textarea>
+            </div>
+          </div>
+          <span class="help-block hide"></span>
+        </div>
+      </div>
+      <div class="controls-row create-row">
+        <button class="span4 btn-create btn btn-large btn-primary" type="submit">Add Suggestion</button>
+      </div>
+    </form>
+  </div>
+
+</div>
+{/content}

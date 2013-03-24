@@ -10,12 +10,12 @@ module.exports = function(app, sharedContext, passport, auth) {
 
   app.get('/accounts', function(req, res){
     var query = req.query;
-    console.log(query);
-    listContributors(function(err, accounts) {
+    var sortOptions = _.pick(query, 'sort', 'order');
+    listContributors(sortOptions, function(err, accounts) {
       if(err) {
         res.send(404);
       } else {
-        res.render('account/list', buildPageContext(req,{accounts: accounts}, sharedContext));
+        res.render('account/list', buildPageContext(req,{accounts: accounts, sortOptions: sortOptions}, sharedContext));
       }
     });
   });
@@ -41,6 +41,15 @@ module.exports = function(app, sharedContext, passport, auth) {
     res.render('account/profile', buildPageContext(req, {user: req.user}, sharedContext));
   });
 
+  app.get('/contributor/:id', function(req, res) {
+    Contributor.findById(req.params.id).select("name creationDate color entries followers following").exec(function(err, contributor) {
+      if(err) {
+        return res.send(404);
+      }
+      return res.render('account/publicProfile', buildPageContext(req, {contributor: contributor}, sharedContext));
+    });
+  });
+
   app.post('/account/updateLocation', function(req, res){
     var body = req.body;
     if(req.user) {
@@ -62,8 +71,7 @@ module.exports = function(app, sharedContext, passport, auth) {
 
   app.post('/account/signup', function(req, res) {
     var reqBody = req.body;
-    console.log(reqBody);
-    var contributor = new Contributor({ name: { first: reqBody.first, last: reqBody.last }, email: reqBody.email, password: reqBody.password, color: reqBody.color});
+    var contributor = new Contributor({ name: { first: reqBody.first, last: reqBody.last }, email: reqBody.email, password: reqBody.password, color: reqBody.color, creationDate: new Date()});
     // Check if account already exists
     Contributor.find({ email: reqBody.email }).exec(function(err, accounts) {
       if(err) {

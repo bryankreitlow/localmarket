@@ -8,7 +8,7 @@ var buildPageContext = function(req, additions, sharedContext) {
   if(req.user) {
     userName = req.user.fullName();
   }
-  return _.extend(additions, {userName: userName}, sharedContext);
+  return _.extend({}, additions, {userName: userName}, sharedContext);
 };
 
 module.exports = {

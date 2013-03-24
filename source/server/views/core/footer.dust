@@ -2,12 +2,12 @@
   <footer>
     <div class="footer">
       <div class="container narrow row-fluid">
-        <div class="span4">
+        <div class="span3">
           <p>© LocalMart 2013</p>
         </div>
-        <div class="span3">
+        <div class="span6">
         </div>
-        <div class="span5">
+        <div class="span3">
         </div>
       </div>
     </div>

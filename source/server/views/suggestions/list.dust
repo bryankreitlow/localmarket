@@ -1,0 +1,44 @@
+{>"core/layout"/}
+
+{<title}Suggestions | LocalMart{/title}
+
+{<content}
+<!-- Main hero unit for a primary marketing message or call to action -->
+<div class="row-fluid" style="padding-top: 20px;">
+  <table class="table table-bordered">
+    <thead>
+    <tr>
+      <td>
+        <b>Suggested By</b>
+      </td>
+      <td>
+        <a href="/suggestions?sort=name&order={@eq key="desc" value=sortOptions.order}asc{:else}desc{/eq}">
+        <b>Suggestion Title</b>
+        </a>
+      </td>
+      <td>
+        <b>Description</b>
+      </td>
+      <td>
+        <a href="/suggestions?sort=creationDate&order={@eq key="desc" value=sortOptions.order}asc{:else}desc{/eq}">
+        <b>Creation Date</b>
+        </a>
+      </td>
+    </tr>
+    </thead>
+    <tbody>
+    {#suggestions}
+    <tr id="{id}">
+      <td><a href="/contributor/{_contributor._id}">{_contributor.name.first}</a></td>
+      <td>{title}</td>
+      <td>{description}</td>
+      <td>{creationDate}{~n}</td>
+    </tr>
+    {:else}
+    <p><b>There are no suggestions!</b></p>
+    {/suggestions}
+    </tbody>
+  </table>
+  <a href="/suggestion" class="btn btn-primary">Make a Suggestion >></a>
+</div>
+{/content}

@@ -27,6 +27,8 @@
           {:else}
             <i>Location Not Set. <a href="/map">Click Here</a>.</i>
           {/location}
+          <label>Account Type</label>
+            <i>{capability}</i>
           <label>Time Zone</label>
           <select name="timezone" id="DropDownTimezone" class="input-xlarge">
             <option value="-12.0">(GMT -12:00) Eniwetok, Kwajalein</option>

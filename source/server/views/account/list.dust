@@ -3,25 +3,40 @@
 {<title}Account List | LocalMart{/title}
 
 {<content}
-<!-- Main hero unit for a primary marketing message or call to action -->
 <div class="row-fluid" style="padding-top: 20px;">
   <table class="table table-bordered">
     <thead>
       <tr>
-        <td><b>Account Name</b></td>
-        <td><b>Creation Date</b></td>
-        <td><b>Type</b></td>
+        <td>
+          <a href="/accounts?sort=name.last&order={@eq key="desc" value=sortOptions.order}asc{:else}desc{/eq}">
+            <b>Name</b>
+          </a>
+        </td>
+        <td>
+          <a href="/accounts?sort=creationDate&order={@eq key="desc" value=sortOptions.order}asc{:else}desc{/eq}">
+            <b>Creation Date</b>
+          </a>
+        </td>
+        <td>
+          <a href="/accounts?sort=capability&order={@eq key="desc" value=sortOptions.order}asc{:else}desc{/eq}">
+            <b>Type</b>
+          </a>
+        </td>
+        <td>
+          <b>Color</b>
+        </td>
       </tr>
     </thead>
     <tbody>
       {#accounts}
       <tr id="{id}">
         <td>{name.last}, {name.first}</td>
-        <td>{createdAt}</td>
-        <td>{capability}{~n}</td>
+        <td>{creationDate}</td>
+        <td>{capability}</td>
+        <td><div style="width:20px; height: 20px; background-color: {color};"></div>{~n}</td>
       </tr>
       {:else}
-      <p>There are no accounts!</p>
+      <p><b>There are no accounts!</b></p>
     {/accounts}
     </tbody>
   </table>

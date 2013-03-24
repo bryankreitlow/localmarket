@@ -6,7 +6,8 @@
   <div class="hero-unit" style="margin-top: 20px;">
   <h2>Welcome to Localmart!</h2>
   <p>This page is currently in the works and will be coming soon with a variety of features to help you find local food.</p>
-  <p><a href="#" class="btn btn-primary btn-large">Learn more »</a></p>
+  <p>While we are building a wonderful experience for you to share recipes and identify local flavors and food availability we would greatly appreciate your input on what features you would like to see added.</p>
+  <p><a href="/suggestions" class="btn btn-primary btn-large">Suggest a Feature »</a></p>
   </div>
 
   <div class="row-fluid">

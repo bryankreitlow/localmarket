@@ -4,6 +4,7 @@
 
 {<content}
 <div class="row-fluid" style="padding-top: 20px;">
+  <div class="span6 offset3">
   {?error}
     <span class="help-block">{error}</span>
   {/error}
@@ -30,5 +31,6 @@
       <button class="span4 btn-create btn btn-large btn-primary" type="submit">Login</button>
     </div>
   </form>
+  </div>
 </div>
 {/content}
