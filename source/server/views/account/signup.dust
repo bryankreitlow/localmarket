@@ -2,6 +2,18 @@
 
 {<title}Sign Up | LocalMart{/title}
 
+{<styles}
+<link href="/assets/css/colorpicker.css" rel="stylesheet">
+{/styles}
+{<scripts}
+<script src="/assets/js/colorpicker/bootstrap-colorpicker.js"></script>
+<script type="text/javascript">
+  $(function(){
+    $("#colorSelect").colorpicker();
+  });
+</script>
+{/scripts}
+
 {<content}
 <!-- Main hero unit for a primary marketing message or call to action -->
 <div class="row-fluid" style="padding-top: 20px;">
@@ -25,10 +37,20 @@
         </div>
       </div>
       <div class="controls-row">
-        <div class="control-group">
-          <label class="span12 control-label">
+        <div class="control-group span6">
+          <label class="control-label">
             <span>Email</span>
             <input class="span12" type="text" name="email">
+          </label>
+          <span class="help-block hide"></span>
+        </div>
+        <div class="control-group span6">
+          <label class="control-label">
+            <span>Color</span>
+            <div class="input-append color" data-color="#d68440" data-color-format="hex" id="colorSelect">
+              <input class="span11" type="text" name="color" value="#d68440" readonly>
+              <span class="add-on"><i style="background-color: #d68440;"></i></span>
+            </div>
           </label>
           <span class="help-block hide"></span>
         </div>

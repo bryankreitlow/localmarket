@@ -24,8 +24,12 @@ module.exports = function(app, sharedContext, passport, auth) {
     res.render('account/login', buildPageContext(req, req.flash(), sharedContext));
   });
 
-  app.post('/login', passport.authenticate('local', {failureRedirect: '/login', failureFlash: 'Invalid email or password.'}), function(req, res) {
-    res.redirect('/');
+  app.post('/login', passport.authenticate('local', {failureRedirect: '/login', failureFlash: true, successFlash: 'Welcome!'}), function(req, res) {
+    // Remember me set, keep the session alive for 30 days!
+    if(req.body.rememberme) {
+      req.session.cookie.maxAge = 30 * 24 * 60 * 60 * 1000;
+    }
+    res.redirect('/profile');
   });
 
   app.get('/logout', function(req, res) {
@@ -43,7 +47,8 @@ module.exports = function(app, sharedContext, passport, auth) {
 
   app.post('/account/signup', function(req, res) {
     var reqBody = req.body;
-    var contributor = new Contributor({ name: { first: reqBody.first, last: reqBody.last }, email: reqBody.email, password: reqBody.password});
+    console.log(reqBody);
+    var contributor = new Contributor({ name: { first: reqBody.first, last: reqBody.last }, email: reqBody.email, password: reqBody.password, color: reqBody.color});
     // Check if account already exists
     Contributor.find({ email: reqBody.email }).exec(function(err, accounts) {
       if(err) {
@@ -53,9 +58,7 @@ module.exports = function(app, sharedContext, passport, auth) {
         if(!accounts.length) {
           contributor.save(function(err, contributor) {
             if(err) {
-              res.writeln('test');
               res.end('Failed to Create Account');
-              console.log(err);
             } else {
               res.end('Account added for ' + contributor.name.first);
             }

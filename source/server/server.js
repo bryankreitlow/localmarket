@@ -12,6 +12,9 @@ var path = require('path'),
     passport = require('passport'),
     auth = require('./util/middleware/authorization');
 
+// Init store for shared sockets on clusters
+var socketStore = new (require('socket.io-clusterhub'));
+
 // Set this to true if you don't want the cluster to run.
 var debugEnv = false || process.env.NODE_ENV === "debug";
 
@@ -105,6 +108,12 @@ dbconnect.initialize(function(result, mongoose) {
       marketingRoutes(app, sharedContext);
 
       app.io.set('log level', 1);
+      app.io.enable('browser client minification');  // send minified client
+      app.io.enable('browser client etag');          // apply etag caching logic based on version number
+      app.io.enable('browser client gzip');          // gzip the file
+      app.io.configure(function() {
+        app.io.set('store', socketStore);
+      });
 
       // log errors
       app.use(function errorHandler(err, req, res, next){

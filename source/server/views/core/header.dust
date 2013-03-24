@@ -30,7 +30,9 @@
               <form class="navbar-form pull-right" method="post" action="/login">
                 <input class="span2" name="email" type="text" placeholder="Email">
                 <input class="span2" name="password" type="password" placeholder="Password">
-                <button type="submit" class="btn">Sign in</button>
+                <input id="user_remember_me" style="float: left; margin-right: 10px;" type="checkbox" name="rememberme" value="true" />
+                <label class="string optional" style="color: #78a4e9;" for="user_remember_me"> Remember me</label>
+                <input class="btn btn-primary" style="clear: left; width: 100%; height: 32px; font-size: 13px;" type="submit" value="Sign In" />
               </form>
             </div>
           </li>

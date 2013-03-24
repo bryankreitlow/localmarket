@@ -2,6 +2,7 @@
 "use strict";
 var mongoose = require('mongoose'),
   LocalStrategy = require('passport-local').Strategy,
+  bcrypt = require('bcrypt'),
   Contributor = mongoose.model('Contributor');
 
 module.exports = function(passport) {
@@ -22,15 +23,18 @@ module.exports = function(passport) {
       passwordField: 'password'
     },
     function(email, password, done) {
-      Contributor.findOne({ email: email }, function (err, contributor) {
-        if (err) { return done(err); }
-        if (!contributor) {
-          return done(null, false, { message: 'Unknown user' });
+      Contributor.getAuthenticated(email, password, function(err, contributor, reason) {
+        if(err) {
+          return done(err);
         }
-        if (!contributor.authenticate(password)) {
-          return done(null, false, { message: 'Invalid password' });
+        if(contributor) {
+          return done(null, contributor);
         }
-        return done(null, contributor);
+        if(reason === 2) {
+          return done(null, false, { message: 'Account Locked Too Many Failed Attempts.' });
+        } else {
+          return done(null, false, { message: 'Invalid email or password.' });
+        }
       });
     }
   ));

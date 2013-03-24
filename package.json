@@ -6,6 +6,7 @@
     "private": false,
     "dependencies": {
       "express.io": "1.1.9",
+      "socket.io-clusterhub": "0.2.0",
       "mongoose": "3.6.0",
       "bcrypt": "0.7.5",
       "underscore":"1.4.4",
