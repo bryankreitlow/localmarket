@@ -9,7 +9,10 @@
 <script src="/assets/js/colorpicker/bootstrap-colorpicker.js"></script>
 <script type="text/javascript">
   $(function(){
-    $("#colorSelect").colorpicker();
+    var apple = $('#appleColor');
+    $("#colorSelect").colorpicker().on('changeColor', function(ev) {
+      apple.css('backgroundColor', ev.color.toHex());
+    });
   });
 </script>
 {/scripts}
@@ -18,7 +21,11 @@
 <!-- Main hero unit for a primary marketing message or call to action -->
 <div class="row-fluid" style="padding-top: 20px;">
   <div class="span6 offset2">
-    <h2>Sign Up</h2>
+    <h2>Sign Up
+      <div id="appleColor" style="background-color: #d68440; width: 64px; height: 64px; margin-top: -14px;" class="pull-right">
+      <img style="height: 64px; width: 64px;" src="/assets/images/account/applemask64.png" />
+      </div>
+    </h2>
     <form method="post">
       <div class="controls-row">
         <div class="control-group span6">
