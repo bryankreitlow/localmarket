@@ -17,7 +17,7 @@ module.exports = function (app, config, passport) {
   }));
   app.use("/assets", express.static('../../static/assets'));
   //Fav icon
-  app.use(express.favicon('../../../favicon/favicon.ico', { maxAge: 2592000000 }));
+  app.use(express.favicon('../../../static/favicon/favicon.ico', { maxAge: 2592000000 }));
   app.use(express.logger('dev'));
 
   // set views path, template engine and default layout
