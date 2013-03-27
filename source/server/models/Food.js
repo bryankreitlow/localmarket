@@ -11,7 +11,6 @@ var FoodSchema = new mongoose.Schema({
     index: true,
     required: true,
     unique: true,
-    trim: true,
     lowercase: true
   },
   type: {
@@ -22,7 +21,7 @@ var FoodSchema = new mongoose.Schema({
 
 FoodSchema.plugin(timestamps);
 
-// Unique requires custom validation
+//Unique requires custom validation
 FoodSchema.pre("save", function(next, done) {
   var self = this;
   mongoose.models.Food.findOne({ name : self.name }, function(err, results) {

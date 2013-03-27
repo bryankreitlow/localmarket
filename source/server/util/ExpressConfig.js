@@ -36,10 +36,12 @@ module.exports = function (app, config, passport) {
 
     // express/mongo session storage
     app.use(express.session({
-      secret: 'SuperSecretSession',
+      secret: 'TheUltimateSessionSecret',
       store: new mongoStore({
         url: config.getMongoDBConnectionString(),
-        collection : 'sessions'
+        maxAge: 300000,
+        auto_reconnect: true,
+        collection : (config.isProduction()) ? 'sessions' : 'devsessions'
       })
     }));
 
