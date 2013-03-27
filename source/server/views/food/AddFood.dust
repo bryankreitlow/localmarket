@@ -1,0 +1,46 @@
+{>"core/layout"/}
+
+{<title}Add Food | LocalMart{/title}
+
+{<content}
+<div class="row-fluid" style="padding-top: 20px;">
+  <div class="span6 offset2 messages">
+    {?message}
+      {message}
+    {/message}
+  </div>
+  <div class="span6 offset2">
+    <h2>Add a Food</h2>
+    <form method="post">
+      <div class="controls-row">
+        <div class="control-group span6">
+          <label class="control-label">
+            <span>Name</span>
+            <input class="span12" type="text" name="name">
+          </label>
+          <span class="help-block hide"></span>
+        </div>
+      </div>
+      <div class="controls-row">
+        <div class="control-group span12">
+          <div class="control-group">
+            <label class="control-label">Type</label>
+            <div class="controls">
+              <select name="type" id="type">
+                {#foodTypes}
+                  <option value="{.}">{.}</option>
+                {/foodTypes}
+              </select>
+            </div>
+          </div>
+          <span class="help-block hide"></span>
+        </div>
+      </div>
+      <div class="controls-row create-row">
+        <button class="span4 btn-create btn btn-large btn-primary" type="submit">Add Food</button>
+      </div>
+    </form>
+  </div>
+
+</div>
+{/content}

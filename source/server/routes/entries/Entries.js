@@ -1,6 +1,5 @@
 /*jslint node:true, es5:true */
 
-var Contributor = require('../../models/Contributor').Model;
 var Entry = require('../../models/Entry').Model;
 var listEntries = require('../../models/Entry').Methods.listEntries;
 var buildPageContext = require('../utils/ContextUtil').buildPageContext;

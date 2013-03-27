@@ -11,6 +11,26 @@ exports.requiresLogin = function (req, res, next) {
   next();
 };
 
+exports.requiresModerator = function (req, res, next) {
+  if (!req.isAuthenticated()) {
+    return res.redirect('/login');
+  }
+  if(!req.user.isModerator()){
+    return res.send(403);
+  }
+  next();
+};
+
+exports.requiresAdmin = function (req, res, next) {
+  if (!req.isAuthenticated()) {
+    return res.redirect('/login');
+  }
+  if(!req.user.isAdmin()){
+    return res.send(403);
+  }
+  next();
+};
+
 
 /*
  *  User authorizations routing middleware

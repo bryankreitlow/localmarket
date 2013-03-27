@@ -12,6 +12,10 @@ var path = require('path'),
     passport = require('passport'),
     auth = require('./util/middleware/authorization');
 
+// Bring in dust for consolidate.js
+require('dustjs-linkedin');
+require('dustjs-helpers');
+
 // Init store for shared sockets on clusters
 var socketStore = new (require('socket.io-clusterhub'));
 
@@ -60,35 +64,35 @@ var sharedContext = {
   isProduction: config.isProduction()
 };
 
-// Initialize the db connection before starting the app
-dbconnect.initialize(function(result, mongoose) {
-  "use strict";
-  if(result) {
-    logger.info("Connection Successful to MongoDB Host " + mongoose.name, "Mongo");
-    if( !debugEnv && cluster.isMaster ) {
-      logger.info("Cluster master started",LogCategory);
-      var clusterSize = config.get(config.NodeClusterSize);
-      if (!clusterSize) {
-        // Autodetecting based on number of CPUs isn't a good idea, because hyperthread units
-        // get counted as full CPUs
-        clusterSize = 8;
-        logger.info('Using hardcoded cluster size: ' + clusterSize,LogCategory);
-      } else {
-        logger.info("Using configured cluster size: " + clusterSize,LogCategory);
-      }
-      for ( var i=0; i<clusterSize; ++i ) {
-        var worker = cluster.fork();
-        worker.on('exit', workerOnExit);
-      }
-    } else {
+if (!debugEnv && cluster.isMaster) {
+  logger.info("Cluster master started", LogCategory);
+  var clusterSize = config.get(config.NodeClusterSize);
+  if (!clusterSize) {
+    // Autodetecting based on number of CPUs isn't a good idea, because hyperthread units
+    // get counted as full CPUs
+    clusterSize = 8;
+    logger.info('Using hardcoded cluster size: ' + clusterSize, LogCategory);
+  } else {
+    logger.info("Using configured cluster size: " + clusterSize, LogCategory);
+  }
+  for (var i = 0; i < clusterSize; ++i) {
+    var worker = cluster.fork();
+    worker.on('exit', workerOnExit);
+  }
+} else {
+  //Init the DB
+  dbconnect.initialize(function (result) {
+    "use strict";
+    if (result) {
+      logger.info("Connection Successful to MongoDB Host", "Mongo");
       var app = express().http().io(),
+        buildPageContext = require('./routes/utils/ContextUtil').buildPageContext,
         mapRoutes = require('./routes/map/map'),
         accountRoutes = require('./routes/account/Accounts'),
         marketingRoutes = require('./routes/marketing/Marketing'),
         entryRoutes = require('./routes/entries/Entries'),
         suggestionRoutes = require('./routes/marketing/Suggestions'),
-        dust = require('dustjs-linkedin'),
-        dustHelpers = require('dustjs-helpers');
+        foodRoutes = require('./routes/food/Foods');
 
       var serverPort = config.get(config.NodeServerPort);
 
@@ -103,41 +107,48 @@ dbconnect.initialize(function(result, mongoose) {
       require('./util/Passport')(passport);
 
       //Configure Server
-      configExpress(app, config, passport);
+      configExpress(app, config, passport, sharedContext);
 
       mapRoutes(app, sharedContext);
       accountRoutes(app, sharedContext, passport, auth);
       entryRoutes(app, sharedContext, passport, auth);
       suggestionRoutes(app, sharedContext, passport, auth);
+      foodRoutes(app, sharedContext, passport, auth);
       marketingRoutes(app, sharedContext);
 
       app.io.set('log level', 1);
       app.io.enable('browser client minification');  // send minified client
       app.io.enable('browser client etag');          // apply etag caching logic based on version number
       app.io.enable('browser client gzip');          // gzip the file
-      app.io.configure(function() {
+      app.io.configure(function () {
         app.io.set('store', socketStore);
       });
 
       // log errors
-      app.use(function errorHandler(err, req, res, next){
+      app.use(function errorHandler(err, req, res, next) {
         try {
-          logger.error("Node error:",LogCategory);
-          logger.error(err.stack,LogCategory);
-          logger.error("Request:",LogCategory);
-          logger.error(JSON.stringify(_.pick(req, "httpVersion", "method", "originalUrl", "body","params", "headers"), undefined, "  "),LogCategory);
-          logger.error("Response:",LogCategory);
-          logger.error(JSON.stringify(_.pick(res, "statusCode", "body", "output", "_headers"), undefined, "  "),LogCategory);
+          logger.error("Node error:", LogCategory);
+          logger.error(err.stack, LogCategory);
+          logger.error("Request:", LogCategory);
+          logger.error(JSON.stringify(_.pick(req, "httpVersion", "method", "originalUrl", "body", "params", "headers"), undefined, "  "), LogCategory);
+          logger.error("Response:", LogCategory);
+          logger.error(JSON.stringify(_.pick(res, "statusCode", "body", "output", "_headers"), undefined, "  "), LogCategory);
         }
         catch (exception) {
           // hope this doesn't happen very often...
           console.log(exception);
         }
-        next();
+        if(err instanceof NotFound) {
+          console.log('[Page Not Found] ' + req.originalUrl);
+          res.status(404).render('error/404', buildPageContext(req, sharedContext));
+        } else {
+          console.log('[Internal Server Error] ' + req.originalUrl);
+          res.status(500).render('error/500', { error: err.stack });
+        }
       });
 
       // Development Settings
-      app.configure(config.ConfigDevelopment, function(){
+      app.configure(config.ConfigDevelopment, function () {
         app.use(express.errorHandler({
           dumpExceptions: true,
           showStack: true
@@ -145,24 +156,40 @@ dbconnect.initialize(function(result, mongoose) {
       });
 
       // Production Settings
-      app.configure(config.ConfigProduction, function(){
+      app.configure(config.ConfigProduction, function () {
         app.use(express.errorHandler());
+      });
+
+      //A Route for Creating a 500 Error (Useful to keep around)
+      app.get('/500', function(req, res){
+        throw new Error('This is a 500 Error');
+      });
+
+      //The 404 Route (ALWAYS Keep this as the last route)
+      app.get('/*', function(req, res){
+        throw new NotFound;
       });
 
       // Start server on listen port.
       var workerId = debugEnv ? "debug" : cluster.worker.id;
       var hServer = app.listen(serverPort);
       hServer.on('error', function (e) {
-        logger.error('Worker #' + workerId + ' received error ' + e.code + ' on syscall ' + e.syscall,LogCategory);
+        logger.error('Worker #' + workerId + ' received error ' + e.code + ' on syscall ' + e.syscall, LogCategory);
         if (e.code === 'EACCES' || e.code === 'EADDRINUSE') {
           process.exit(workerExitCannotBind);
         }
         process.exit(workerExitUnknown);
       });
-      logger.info('Worker #' + workerId + ' started on http://localhost:' + serverPort,LogCategory);
+      logger.info('Worker #' + workerId + ' started on http://localhost:' + serverPort, LogCategory);
+    } else {
+      logger.error("Unable to connect to db. Error " + result + ". ", 'Mongo');
+      process.exit(1);
     }
-  } else {
-    logger.error("Unable to connect to db. Error " + result + ". ",'Mongo');
-    process.exit(1);
-  }
-});
+  });
+}
+
+function NotFound(msg){
+  this.name = 'NotFound';
+  Error.call(this, msg);
+  Error.captureStackTrace(this, arguments.callee);
+}

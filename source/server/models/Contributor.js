@@ -21,7 +21,7 @@ var ContributorSchema = new mongoose.Schema({
     unique: true
   },
   capability: { // [user, moderator, admin]
-    type: String,
+    type: String, enum : ["user", "moderator", "admin"],
     default: "user"
   },
   password: {
@@ -97,18 +97,24 @@ ContributorSchema.pre('save', function(next) {
 ContributorSchema.plugin(timestamps);
 
 ContributorSchema.methods = {
-  comparePassword: function(candidatePass, cb) {
+  comparePassword: function (candidatePass, cb) {
     var self = this;
-    bcrypt.compare(candidatePass, self.password, function(err, isMatch) {
+    bcrypt.compare(candidatePass, self.password, function (err, isMatch) {
       if (err) {
         cb(err);
       }
       cb(null, isMatch);
     });
   },
-  incLoginAttempts: function(cb) {
+  isModerator: function () {
+    return this.capability === "moderator" || this.capability === "admin";
+  },
+  isAdmin: function () {
+    return this.capability === "admin";
+  },
+  incLoginAttempts: function (cb) {
     // If previously expired lock restart at 1
-    if(this.lockUntil && this.lockUntil < Date.now()) {
+    if (this.lockUntil && this.lockUntil < Date.now()) {
       return this.update({
         $set: {loginAttempts: 1},
         $unset: {lockUntil: 1}
@@ -117,15 +123,15 @@ ContributorSchema.methods = {
     // Otherwise time to increment failed attempts
     var updates = { $inc: { loginAttempts: 1 }};
     // Lock the account if max number reached and not already locked
-    if(this.loginAttempts + 1 >= MAX_LOGIN_ATTEMPTS && !this.isLocked) {
+    if (this.loginAttempts + 1 >= MAX_LOGIN_ATTEMPTS && !this.isLocked) {
       updates.$set = { lockUntil: Date.now() + LOCK_TIME };
     }
     return this.update(updates, cb);
   },
-  fullName: function() {
+  fullName: function () {
     return this.name.first + ' ' + this.name.last;
   },
-  setLocation: function(locArray, cb) {
+  setLocation: function (locArray, cb) {
     var updates = { $set: {location: locArray}};
     return this.update(updates, cb);
   }

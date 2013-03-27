@@ -10,16 +10,23 @@ var EntrySchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Contributor'
   },
-  title: {
-    type: String,
+  type: {
+    type: String, enum: ['Recipe', 'Market', 'Event'],
     index: true,
     required: true
   },
-  type: {
-    type: String,
-    index: true,
-    required: true
+  recipe: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Recipe'
   }
+//  market: {
+//    type: mongoose.Schema.Types.ObjectId,
+//    ref: 'Market'
+//  },
+//  event: {
+//    type: mongoose.Schema.Types.ObjectId,
+//    ref: 'Event'
+//  }
 });
 
 EntrySchema.plugin(timestamps);

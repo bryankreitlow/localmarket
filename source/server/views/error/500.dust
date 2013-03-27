@@ -1,0 +1,12 @@
+{>"core/layout"/}
+
+{<title}Server Error | LocalMart{/title}
+
+{<content}
+<div class="row-fluid" style="padding-top: 20px;">
+  <div class="span12">
+    <h2>The Server Encountered an Error</h2>
+    <p>{error}</p>
+  </div>
+</div>
+{/content}
