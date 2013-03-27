@@ -15,7 +15,6 @@ module.exports = function(app, sharedContext, passport, auth) {
       sortOptions.sort = 'creationDate';
     }
     listSuggestions(sortOptions, function(err, suggestions) {
-      console.log(suggestions);
       if(err) {
         res.send(404);
       } else {
@@ -30,7 +29,6 @@ module.exports = function(app, sharedContext, passport, auth) {
     // Save new suggestion
     suggestion.save(function(err, suggestion) {
       if(err) {
-        console.log(err);
         res.end('Failed to Save Suggestion');
       } else {
         res.end('Suggestion added, thank you ' + req.user.name.first + '.');
