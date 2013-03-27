@@ -92,7 +92,7 @@ if (!debugEnv && cluster.isMaster) {
         marketingRoutes = require('./routes/marketing/Marketing'),
         entryRoutes = require('./routes/entries/Entries'),
         suggestionRoutes = require('./routes/marketing/Suggestions'),
-        foodRoutes = require('./routes/food/Foods');
+        foodRoutes = require('./routes/food/foods');
 
       var serverPort = config.get(config.NodeServerPort);
 
