@@ -21,7 +21,7 @@ Development
 
 Install node supervisor https://github.com/isaacs/node-supervisor to watch files for changes triggering a server restart while coding
 
-supervisor -e dust -w ../server/ server.js
+supervisor -e dust,js -w ../server/ server.js
 
 The above command ran within the source/server/ directory will watch the entire server directory for changes and will also look for changes in files with the .dust extension, unfortunately there is no way to turn off caching for dust templates at the moment
 

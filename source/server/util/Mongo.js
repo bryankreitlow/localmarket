@@ -17,8 +17,11 @@ var Mongo = {
       console.log('db connect error');
       callback(error, null);
     });
-    db.on('open', function() {
-      callback(true, self.db);
+    db.on('connected', function() {
+      callback(true, db);
+    });
+    db.on('disconnected', function() {
+      console.log('Disconnected from the MongoDB database');
     });
   }
 };

@@ -8,7 +8,8 @@ var timestamps = require('mongoose-timestamp');
 var EntrySchema = new mongoose.Schema({
   _contributor: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'Contributor'
+    ref: 'Contributor',
+    index: true
   },
   type: {
     type: String, enum: ['Recipe', 'Market', 'Event'],

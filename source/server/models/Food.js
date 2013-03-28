@@ -8,10 +8,10 @@ var timestamps = require('mongoose-timestamp');
 var FoodSchema = new mongoose.Schema({
   name: {
     type: String,
-    index: true,
-    required: true,
     unique: true,
-    lowercase: true
+    required: true,
+    lowercase: true,
+    trim: true
   },
   type: {
     type: String, enum: ["grown", "made"],
@@ -21,20 +21,7 @@ var FoodSchema = new mongoose.Schema({
 
 FoodSchema.plugin(timestamps);
 
-//Unique requires custom validation
-FoodSchema.pre("save", function(next, done) {
-  var self = this;
-  mongoose.models.Food.findOne({ name : self.name }, function(err, results) {
-   if(err) {
-     done(err);
-   } else if(results) { //result found so food exists
-     self.invalidate("name", "must be unique, duplicate record");
-     done(new Error("Food name must be unique, duplicate found"));
-   } else {
-     done();
-   }
-  });
-});
+var Food = mongoose.model('Food', FoodSchema);
 
 FoodSchema.methods = {
   listAll: function (options, cb) {
@@ -44,9 +31,7 @@ FoodSchema.methods = {
   }
 };
 
-mongoose.model('Food', FoodSchema);
-
 module.exports = {
-  Model: mongoose.model('Food'),
+  Model: Food,
   Methods: FoodSchema.methods
 };

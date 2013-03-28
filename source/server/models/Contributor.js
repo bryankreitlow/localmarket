@@ -16,9 +16,8 @@ var Email = mongoose.SchemaTypes.Email;
 var ContributorSchema = new mongoose.Schema({
   email: {
     type: Email,
-    index: true,
-    required: true,
-    unique: true
+    index: {unique: true},
+    required: true
   },
   capability: { // [user, moderator, admin]
     type: String, enum : ["user", "moderator", "admin"],
@@ -42,7 +41,8 @@ var ContributorSchema = new mongoose.Schema({
   },
   entries: [{
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'Entry'
+    ref: 'Entry',
+    index: true
   }],
   following: [{
     type: mongoose.Schema.Types.ObjectId,
@@ -188,13 +188,13 @@ ContributorSchema.statics.getAuthenticated = function(email, password, cb) {
   });
 };
 
+mongoose.model('Contributor', ContributorSchema);
+
 var listContributors = ContributorSchema.methods.listContributors = function (options, cb) {
   var sort = options.sort;
   var order = (options.order === 'desc') ? '-' : '+';
   return mongoose.model('Contributor').find().sort(order + sort).select("name location creationDate capability color").exec(cb);
 };
-
-mongoose.model('Contributor', ContributorSchema);
 
 module.exports = {
   Model: mongoose.model('Contributor'),

@@ -16,7 +16,8 @@ var IngredientSchema = new mongoose.Schema({
   },
   _food: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'Food'
+    ref: 'Food',
+    index: true
   }
 });
 
