@@ -19,11 +19,11 @@ var EntrySchema = new mongoose.Schema({
   recipe: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Recipe'
-  }
-//  market: {
-//    type: mongoose.Schema.Types.ObjectId,
-//    ref: 'Market'
-//  },
+  },
+  market: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Market'
+  },
 //  event: {
 //    type: mongoose.Schema.Types.ObjectId,
 //    ref: 'Event'

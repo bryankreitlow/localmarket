@@ -14,10 +14,10 @@ module.exports = function (app, sharedContext, passport, auth) {
     var reqBody = req.body;
     var food = new Food({ name: reqBody.name, type : reqBody.type});
     // Save new suggestion
-    food.save(function (err, food) {
+    food.save(function (err) {
       var message;
       if (err) {
-        message = 'Failed to Save Food ' + reqBody.name;
+        message = err;
       } else {
         message = 'Food ' + food.name + ' added, thank you ' + req.user.name.first + '.';
       }
