@@ -53,7 +53,7 @@ module.exports = function(app, sharedContext, passport, auth) {
   app.post('/account/updateLocation', function(req, res){
     var body = req.body;
     if(req.user) {
-      req.user.setLocation([body.lat, body.long], function(err) {
+      req.user.setLocation([body.long, body.lat], function(err) {
         if(err) {
           res.send(404);
         }

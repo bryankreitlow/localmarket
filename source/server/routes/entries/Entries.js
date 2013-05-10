@@ -65,7 +65,7 @@ module.exports = function(app, sharedContext, passport, auth) {
             //console.log(body.results[0].address_components);
             if(body.results[0] && body.results[0].geometry && body.results[0].geometry.location) {
               var location = body.results[0].geometry.location;
-              var locArray = [location.lat, location.lng];
+              var locArray = [location.lng, location.lat];
               market.location = locArray;
             } else {
               console.log('No Location Derived for Market ' + reqBody.name);
@@ -96,6 +96,16 @@ module.exports = function(app, sharedContext, passport, auth) {
       default:
         completed("Cannot Process Request, No Definition for Type " + type);
     }
+  });
+
+  app.get('/market/:id', function(req, res) {
+    Entry.findById(req.params.id).populate('market').exec(function(err, entry) {
+      var location = (entry.market.location[0]) ? entry.market.location : [null, null];
+      if(err) {
+        return res.send(404);
+      }
+      return res.render('entry/viewMarket', buildPageContext(req, {entry: entry, lat: location[1], long: location[0]}, sharedContext));
+    });
   });
 
   app.get('/entry/:id', function(req, res) {

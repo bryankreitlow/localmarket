@@ -1,0 +1,98 @@
+{>"core/layout"/}
+
+{<title}MarketFinder | LocalMart{/title}
+
+{<styles}
+<link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.5.1/leaflet.css" />
+<!--[if lte IE 8]>
+<link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.5.1/leaflet.ie.css" />
+<![endif]-->
+{/styles}
+{<scripts}
+<script type="text/javascript" src="http://cdn.leafletjs.com/leaflet-0.5.1/leaflet.js"></script>
+<script type="text/javascript">
+  $(function(){
+  var location = {lat: {location.lat}, long: {location.long}};
+  var marketLocations = {marketLocations|s};
+  var savedLocation = (location.lat && location.long) ? [location.lat, location.long] : false;
+  var marker = L.marker();
+  var map = L.map('map').setView([39.96487356336187, -93.49266517162323], 10);
+
+  var locationTip = $('#locationTip');
+  $('#selectSpot').click(function() {
+    locationTip.removeClass('hide');
+  });
+
+  map.on('click', function(e) {
+    if($('#selectSpot').hasClass('active')) {
+      $.post('/marketfinder', {lat: e.latlng.lat, long: e.latlng.lng})
+              .done( function() {
+                $('#selectSpot').removeClass('active');
+                locationTip.addClass('hide');
+                marker.setLatLng(e.latlng);
+                if(!savedLocation) {
+                  marker.addTo(map);
+                }
+                map.panTo(e.latlng);
+              })
+              .error(function(data) {
+
+              });
+    }
+  });
+
+  L.tileLayer('http://{~lb}s{~rb}.tile.stamen.com/toner-lite/{~lb}z{~rb}/{~lb}x{~rb}/{~lb}y{~rb}.png', {
+    attribution:
+            'Map tiles by <a href="http://stamen.com">Stamen Design</a>, <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> &mdash; ' +
+                    'Map data &copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
+    subdomains: 'abcd',
+    minZoom: 0,
+    maxZoom: 20
+  }).addTo(map);
+
+  if(savedLocation) {
+    marker.setLatLng(savedLocation);
+    marker.addTo(map);
+    map.panTo(savedLocation);
+  }
+
+  if(marketLocations) {
+    $.each(marketLocations, function(index, marketLocation) {
+      var marketmarker = new L.marker([marketLocation.lat, marketLocation.long],{title: marketLocation.name, riseOnHover: true});
+      marketmarker.bindPopup('<a href="/market/' + marketLocation.id + '">' + marketLocation.name + '</a>');
+      marketmarker.addTo(map);
+    });
+  }
+
+  });
+</script>
+{/scripts}
+
+{<content}
+<div class="row-fluid" style="padding-top: 10px;">
+  <div class="span12">
+    <div class="span6 offset3">
+      <div class="span6">
+        <a id="selectSpot" class="btn btn-info" data-toggle="button">Select Your Spot</a>
+      </div>
+      <div class="span6">
+        <div id="locationTip" class="inline hide" style="text-align: center;">
+          <b>Click Your Location</b>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="row-fluid" style="padding-top: 10px; padding-bottom: 20px;">
+  <div id="map" style="height: 500px;"></div>
+</div>
+<div class="row-fluid">
+  {#entries}
+    <a href="/market/{_id}">
+    {#market}
+      <p>{displayName}</p>
+    {/market}
+    </a>
+  {/entries}
+</div>
+{/content}

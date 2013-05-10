@@ -24,10 +24,10 @@ var EntrySchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Market'
   },
-//  event: {
-//    type: mongoose.Schema.Types.ObjectId,
-//    ref: 'Event'
-//  }
+  event: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Event'
+  }
 });
 
 EntrySchema.plugin(timestamps);
@@ -41,10 +41,22 @@ var listEntries = EntrySchema.methods.listEntries = function (options, cb) {
   return mongoose.model('Entry').find().populate('_contributor', 'name').sort(order + sort).select("title type _contributor").exec(cb);
 };
 
+var listEntriesInRadius = EntrySchema.methods.listEntriesInRadius = function (options, cb) {
+  var entryType = options.entryType;
+  var radius = options.radius / 3963.192;
+  //convert radius distance from miles to radians by dividing miles by the radius of earth 3963.192 miles
+  var currentlocation = options.location;
+  var order = (options.order === 'desc') ? '-' : '+';
+  return mongoose.model('Entry').find({type: entryType}).populate(entryType.toLowerCase(),null,{location: {
+    $nearSphere: [currentlocation.long, currentlocation.lat], $maxDistance: radius
+  }}).exec(cb);
+};
+
 
 module.exports = {
   Model: mongoose.model('Entry'),
   Methods: {
-    listEntries: listEntries
+    listEntries: listEntries,
+    listEntriesInRadius: listEntriesInRadius
   }
 };

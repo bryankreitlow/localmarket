@@ -1,0 +1,79 @@
+{>"core/layout"/}
+
+{<title}Market {#entry.market}{displayName}{/entry.market} | LocalMart{/title}
+
+{<styles}
+<link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.5.1/leaflet.css" />
+<!--[if lte IE 8]>
+<link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.5.1/leaflet.ie.css" />
+<![endif]-->
+{/styles}
+{<scripts}
+<script type="text/javascript" src="http://cdn.leafletjs.com/leaflet-0.5.1/leaflet.js"></script>
+<script type="text/javascript">
+  $(function(){
+  var location = {lat: {?lat}{lat}{:else}undefined{/lat}, long: {?long}{long}{:else}undefined{/long} };
+  var map;
+          if(location.lat){
+            var savedLocation = (location.lat && location.long) ? [location.lat, location.long] : false;
+            var marker = L.marker();
+            map = L.map('map').setView([location.lat, location.long], 12);
+          }
+          else{
+          map = L.map('map').setView([39.96487356336187, -93.49266517162323], 3);
+          }
+
+  var locationTip = $('#locationTip');
+  $('#selectSpot').click(function() {
+    locationTip.removeClass('hide');
+  });
+
+  L.tileLayer('http://{~lb}s{~rb}.tile.stamen.com/toner-lite/{~lb}z{~rb}/{~lb}x{~rb}/{~lb}y{~rb}.png', {
+    attribution:
+            'Map tiles by <a href="http://stamen.com">Stamen Design</a>, <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> &mdash; ' +
+                    'Map data &copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
+    subdomains: 'abcd',
+    minZoom: 0,
+    maxZoom: 20
+  }).addTo(map);
+
+  if(savedLocation) {
+    marker.setLatLng(savedLocation);
+    marker.addTo(map);
+    map.panTo(savedLocation);
+  }
+  });
+</script>
+{/scripts}
+
+{<content}
+<div class="row-fluid" style="padding-top: 20px;">
+  {#entry.market}
+  <div class="span10">
+    <img src="/assets/images/marketbanner.png">
+    <h2 style="margin-left: 50px;">{displayName}</h2>
+    <div class="span5">
+      Vendors Go Here
+    </div>
+    <div class="span5">
+      <div id="map" style="height: 300px;"></div>
+      <h3>Market Location</h3>
+      <p>
+        {addressLine1}
+      </p>
+      {?addressLine2}
+        <p>
+          {addressLine2}
+        </p>
+      {/addressLine2}
+      <p>
+        {city}, {region} {postalCode}
+      </p>
+    </div>
+  </div>
+  <div class="span2">
+    //Other nearby markets
+  </div>
+  {/entry.market}
+</div>
+{/content}

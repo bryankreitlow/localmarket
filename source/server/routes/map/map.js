@@ -9,7 +9,7 @@ module.exports = function(app, sharedContext) {
   app.get('/map', function(req, res){
     var location;
     if(req.user && req.user.location) {
-      location = (req.user.location[0]) ? {lat: req.user.location[0], long: req.user.location[1]} : {lat: "false", long: "false"};
+      location = (req.user.location[0]) ? {lat: req.user.location[1], long: req.user.location[0]} : {lat: "false", long: "false"};
     } else {
       location = (req.session.location) ? (req.session.location) : {lat: "false", long: "false"};
     }

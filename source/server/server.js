@@ -89,6 +89,7 @@ if (!debugEnv && cluster.isMaster) {
         buildPageContext = require('./routes/utils/ContextUtil').buildPageContext,
         mapRoutes = require('./routes/map/map'),
         accountRoutes = require('./routes/account/Accounts'),
+        marketfinderRoutes = require('./routes/marketfinder/marketfinder'),
         marketingRoutes = require('./routes/marketing/Marketing'),
         entryRoutes = require('./routes/entries/Entries'),
         suggestionRoutes = require('./routes/marketing/Suggestions'),
@@ -112,6 +113,7 @@ if (!debugEnv && cluster.isMaster) {
       mapRoutes(app, sharedContext);
       accountRoutes(app, sharedContext, passport, auth);
       entryRoutes(app, sharedContext, passport, auth);
+      marketfinderRoutes(app, sharedContext, passport, auth);
       suggestionRoutes(app, sharedContext, passport, auth);
       foodRoutes(app, sharedContext, passport, auth);
       marketingRoutes(app, sharedContext);
