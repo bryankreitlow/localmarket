@@ -17,18 +17,18 @@ module.exports = function (app, sharedContext, passport, auth) {
       location = (req.session.location) ? (req.session.location) : {lat: "false", long: "false"};
     }
     listEntriesInRadius({entryType: 'Market', location: location, radius: 25}, function(err, entries) {
+      var marketLocations = [];
       if(err) {
         markets = [];
       } else {
         markets = _.filter(entries, function(entry) {
           return entry.market !== null;
         });
-        var marketLocations = [];
         _.forEach(markets, function(market) {
           marketLocations.push({name: market.market.displayName, id: market._id, long: market.market.location[0], lat: market.market.location[1]});
         });
-        res.render('marketfinder/marketfinder', buildPageContext(req,{location: location, entries: markets, marketLocations: JSON.stringify(marketLocations)}, sharedContext));
       }
+      res.render('marketfinder/marketfinder', buildPageContext(req,{location: location, entries: markets, marketLocations: JSON.stringify(marketLocations)}, sharedContext));
     });
   });
 };
