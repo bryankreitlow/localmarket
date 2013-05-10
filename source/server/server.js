@@ -89,7 +89,7 @@ if (!debugEnv && cluster.isMaster) {
         buildPageContext = require('./routes/utils/ContextUtil').buildPageContext,
         mapRoutes = require('./routes/map/map'),
         accountRoutes = require('./routes/account/Accounts'),
-        marketfinderRoutes = require('./routes/marketfinder/marketfinder'),
+        marketfinderRoutes = require('./routes/marketfinder/MarketFinder'),
         marketingRoutes = require('./routes/marketing/Marketing'),
         entryRoutes = require('./routes/entries/Entries'),
         suggestionRoutes = require('./routes/marketing/Suggestions'),
