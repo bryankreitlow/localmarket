@@ -1,0 +1,21 @@
+{% extends "core/layout.html" %}
+
+{% set View.Title = "LocalMart | Entries List" %}
+
+{% block content %}
+<div class="row-fluid" style="padding-top: 20px;">
+  {% for entry in entries %}
+    <p>{{entry.type}}
+      {% if entry.type == "Recipe" %}
+        - <a href="/recipe/{{entry._id}}">Link</a>
+      {% else if entry.type == "Market" %}
+        - <a href="/market/{{entry._id}}">Link</a>
+      {% else if entry.type == "Event" %}
+        - <a href="/event/{{entry._id}}">Link</a>
+      {% endif %}
+    </p>
+  {% else %}
+  <h2>No Entries</h2>
+  {% endfor %}
+</div>
+{% endblock %}

@@ -20,12 +20,12 @@ var getAddress = function(market) {
 module.exports = function(app, sharedContext, passport, auth) {
   "use strict";
 
-  app.get('/entries', function(req, res){
+  app.get('/entries', function(req, res, next){
     var query = req.query;
     var sortOptions = _.pick(query, 'sort', 'order');
     listEntries(sortOptions, function(err, entries) {
       if(err) {
-        res.send(404);
+        next(err);
       } else {
         res.render('entry/list', buildPageContext(req,{entries: entries, sortOptions: sortOptions}, sharedContext));
       }
@@ -36,12 +36,12 @@ module.exports = function(app, sharedContext, passport, auth) {
     res.render('entry/AddEntry', buildPageContext(req, {user: req.user, entryTypes: enums}, sharedContext));
   });
 
-  app.post('/entry/add', auth.requiresLogin, function(req, res){
+  app.post('/entry/add', auth.requiresLogin, function(req, res, next){
     var reqBody = req.body, type = reqBody.type;
     var message;
     var completed = function(err) {
       if(err) {
-        message = err;
+        next(err);
       } else {
         message = type + " Added.";
       }
@@ -98,20 +98,20 @@ module.exports = function(app, sharedContext, passport, auth) {
     }
   });
 
-  app.get('/market/:id', function(req, res) {
+  app.get('/market/:id', function(req, res, next) {
     Entry.findById(req.params.id).populate('market').exec(function(err, entry) {
       var location = (entry.market.location[0]) ? entry.market.location : [null, null];
       if(err) {
-        return res.send(404);
+        next(err);
       }
       return res.render('entry/viewMarket', buildPageContext(req, {entry: entry, lat: location[1], long: location[0]}, sharedContext));
     });
   });
 
-  app.get('/entry/:id', function(req, res) {
+  app.get('/entry/:id', function(req, res, next) {
     Entry.findById(req.params.id).select("title type").exec(function(err, entry) {
       if(err) {
-        return res.send(404);
+        next(err);
       }
       return res.render('entry/viewEntry', buildPageContext(req, {entry: entry}, sharedContext));
     });

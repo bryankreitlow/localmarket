@@ -1,0 +1,44 @@
+{% extends "core/layout.html" %}
+
+{% set View.Title = "LocalMart | Suggestions" %}
+
+{% block content %}
+<!-- Main hero unit for a primary marketing message or call to action -->
+<div class="row-fluid" style="padding-top: 20px;">
+  <table class="table table-bordered">
+    <thead>
+    <tr>
+      <td>
+        <b>Suggested By</b>
+      </td>
+      <td>
+        <a href="/suggestions?sort=name&order={% if sortOptions.order == "desc" %}asc{% else %}desc{% endif %}">
+        <b>Suggestion Title</b>
+        </a>
+      </td>
+      <td>
+        <b>Description</b>
+      </td>
+      <td>
+        <a href="/suggestions?sort=creationDate&order={% if sortOptions.order == "desc" %}asc{% else %}desc{% endif %}">
+        <b>Creation Date</b>
+        </a>
+      </td>
+    </tr>
+    </thead>
+    <tbody>
+    {% for suggestion in suggestions %}
+    <tr id="{id}">
+      <td><a href="/contributor/{{suggestion._contributor._id}}">{{suggestion._contributor.name.first}}</a></td>
+      <td>{{suggestion.title}}</td>
+      <td>{{suggestion.description}}</td>
+      <td>{{suggestion.creationDate}}</td>
+    </tr>
+    {% else %}
+    <p><b>There are no suggestions!</b></p>
+    {% endfor %}
+    </tbody>
+  </table>
+  <a href="/suggestion" class="btn btn-primary">Make a Suggestion >></a>
+</div>
+{% endblock %}

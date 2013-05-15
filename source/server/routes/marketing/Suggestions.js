@@ -8,7 +8,7 @@ var _ = require('underscore');
 module.exports = function(app, sharedContext, passport, auth) {
   "use strict";
 
-  app.get('/suggestions', function(req, res){
+  app.get('/suggestions', function(req, res, next){
     var query = req.query;
     var sortOptions = _.pick(query, 'sort', 'order');
     if(!sortOptions.sort) {
@@ -16,20 +16,20 @@ module.exports = function(app, sharedContext, passport, auth) {
     }
     listSuggestions(sortOptions, function(err, suggestions) {
       if(err) {
-        res.send(404);
+        next(err);
       } else {
         res.render('suggestions/list', buildPageContext(req, {suggestions: suggestions, user: req.user}, sharedContext));
       }
     });
   });
 
-  app.post('/suggestion', auth.requiresLogin, function(req, res) {
+  app.post('/suggestion', auth.requiresLogin, function(req, res, next) {
     var reqBody = req.body;
     var suggestion = new Suggestion({ title: reqBody.title, _contributor: req.user._id, description: reqBody.description, creationDate: new Date()});
     // Save new suggestion
     suggestion.save(function(err, suggestion) {
       if(err) {
-        res.end('Failed to Save Suggestion');
+        next(err);
       } else {
         res.end('Suggestion added, thank you ' + req.user.name.first + '.');
       }

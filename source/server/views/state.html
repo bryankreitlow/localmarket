@@ -1,13 +1,13 @@
-{>"core/layout"/}
+{% extends "core/layout.html" %}
 
-{<title}State | LocalMart{/title}
+{% set View.Title = "LocalMart | State" %}
 
-{<content}
+{% block content %}
 <br/>
 <div class='row-fluid'>
     <div class='span8 offset2'>
-    <h2>{state}</h2>
+    <h2>{{state}}</h2>
     <div id="container" style="padding-top: 30px;"></div>
     </div>
 </div>
-{/content}
+{% endblock %}

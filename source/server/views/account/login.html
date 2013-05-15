@@ -1,13 +1,13 @@
-{>"core/layout"/}
+{% extends "core/layout.html" %}
 
-{<title}Account List | LocalMart{/title}
+{% set View.Title = "LocalMart | Login" %}
 
-{<content}
+{% block content %}
 <div class="row-fluid" style="padding-top: 20px;">
   <div class="span6 offset3">
-  {?error}
+  {% if error %}
     <span class="help-block">{error}</span>
-  {/error}
+  {% endif %}
   <form method="post">
     <div class="controls-row">
       <div class="control-group">
@@ -33,4 +33,4 @@
   </form>
   </div>
 </div>
-{/content}
+{% endblock %}

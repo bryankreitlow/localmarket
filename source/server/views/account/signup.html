@@ -1,11 +1,12 @@
-{>"core/layout"/}
+{% extends "core/layout.html" %}
 
-{<title}Sign Up | LocalMart{/title}
+{% set View.Title = "LocalMart | Sign Up" %}
 
-{<styles}
+{% block styles %}
 <link href="/assets/css/colorpicker.css" rel="stylesheet"/>
-{/styles}
-{<scripts}
+{% endblock %}
+
+{% block scripts %}
 <script src="/assets/js/colorpicker/bootstrap-colorpicker.js"></script>
 <script type="text/javascript">
   $(function(){
@@ -15,9 +16,9 @@
     });
   });
 </script>
-{/scripts}
+{% endblock %}
 
-{<content}
+{% block content %}
 <div class="row-fluid" style="padding-top: 20px;">
   <div class="span6 offset2">
     <h2>Sign Up
@@ -79,6 +80,5 @@
       </div>
       </form>
   </div>
-
 </div>
-{/content}
+{% endblock %}

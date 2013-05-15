@@ -1,8 +1,8 @@
-{>"core/layout"/}
+{% extends "core/layout.html" %}
 
-{<title}LocalMart{/title}
+{% set View.Title = "Welcome to LocalMart" %}
 
-{<content}
+{% block content %}
   <div class="hero-unit" style="margin-top: 20px;">
   <h2>Welcome to Localmart!</h2>
   <p>This page is currently in the works and will be coming soon with a variety of features to help you find local food.</p>
@@ -25,4 +25,4 @@
   </div>
   </div>
   <hr>
-{/content}
+{% endblock %}

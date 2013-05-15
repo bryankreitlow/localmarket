@@ -12,10 +12,6 @@ var path = require('path'),
     passport = require('passport'),
     auth = require('./util/middleware/authorization');
 
-// Bring in dust for consolidate.js
-require('dustjs-linkedin');
-require('dustjs-helpers');
-
 // Init store for shared sockets on clusters
 var socketStore = new (require('socket.io-clusterhub'));
 
@@ -61,7 +57,10 @@ var workerOnExit = function(code, signal) {
 
 // Initialize a shared viewContext
 var sharedContext = {
-  isProduction: config.isProduction()
+  isProduction: config.isProduction(),
+  View: {
+    Title: 'Localmart 2013'
+  }
 };
 
 if (!debugEnv && cluster.isMaster) {
@@ -145,7 +144,7 @@ if (!debugEnv && cluster.isMaster) {
           res.status(404).render('error/404', buildPageContext(req, sharedContext));
         } else {
           console.log('[Internal Server Error] ' + req.originalUrl);
-          res.status(500).render('error/500', { error: err.stack });
+          res.status(500).render('error/500', buildPageContext(req, { error: err.stack }, sharedContext));
         }
       });
 

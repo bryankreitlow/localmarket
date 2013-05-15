@@ -1,0 +1,44 @@
+{% extends "core/layout.html" %}
+
+{% set View.Title = "LocalMart | Account List" %}
+
+{% block content %}
+<div class="row-fluid" style="padding-top: 20px;">
+  <table class="table table-bordered">
+    <thead>
+      <tr>
+        <td>
+          <a href="/accounts?sort=name.last&order={% if sortOptions.order === "desc" %}asc{% else %}desc{% endif %}">
+            <b>Name</b>
+          </a>
+        </td>
+        <td>
+          <a href="/accounts?sort=creationDate&order={% if sortOptions.order === "desc" %}asc{% else %}desc{% endif %}">
+            <b>Creation Date</b>
+          </a>
+        </td>
+        <td>
+          <a href="/accounts?sort=capability&order={% if sortOptions.order === "desc" %}asc{% else %}desc{% endif %}">
+            <b>Type</b>
+          </a>
+        </td>
+        <td>
+          <b>Color</b>
+        </td>
+      </tr>
+    </thead>
+    <tbody>
+      {% for account in accounts %}
+      <tr id="{{account.id}}">
+        <td>{{account.name.last}}, {{account.name.first}}</td>
+        <td>{{account.creationDate}}</td>
+        <td>{{account.capability}}</td>
+        <td><div style="width:20px; height: 20px; background-color: {{account.color}};"></div></td>
+      </tr>
+      {% else %}
+      <p><b>There are no accounts!</b></p>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

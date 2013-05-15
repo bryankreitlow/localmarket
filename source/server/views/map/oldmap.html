@@ -1,16 +1,16 @@
-{>"core/layout"/}
+{% extends "core/layout.html" %}
 
-{<title}Map | LocalMart{/title}
+{% set View.Title = "LocalMart | Map" %}
 
-{<scripts}
+{% block scripts %}
   <script src="assets/js/usmap/raphael-min.js"></script>
   <script src="assets/js/usmap/us-map-svg.js"></script>
   <script src="assets/js/usmap/show-map.js"></script>
-{/scripts}
+{% endblock %}
 
-{<content}
+{% block content %}
   <div class='row-fluid'>
       <div class='span10 offset1' id="container">
       </div>
   </div>
-{/content}
+{% endblock %}

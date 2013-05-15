@@ -21,10 +21,10 @@
               <li><a href="/plantingguide"><i class="icon-list-alt"></i> Planting Guide</a></li>
             </ul>
           </li>
-          {?userName}
+          {% if userName %}
           <li><a href="/profile">Profile</a></li>
           <li><a href="/logout">Logout</a></li>
-          {:else}
+          {% else %}
           <li class="divider-vertical"></li>
           <li class="dropdown">
             <a class="dropdown-toggle" href="#" data-toggle="dropdown">Sign In <strong class="caret"></strong></a>
@@ -40,7 +40,7 @@
               </form>
             </div>
           </li>
-          {/userName}
+          {% endif %}
         </ul>
       </div>
     </div>

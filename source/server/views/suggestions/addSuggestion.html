@@ -1,8 +1,8 @@
-{>"core/layout"/}
+{% extends "core/layout.html" %}
 
-{<title}Add Suggestions | LocalMart{/title}
+{% set View.Title = "LocalMart | Add Suggestion" %}
 
-{<content}
+{% block content %}
 <div class="row-fluid" style="padding-top: 20px;">
   <div class="span6 offset2">
     <h2>Add a Suggestion</h2>
@@ -32,6 +32,5 @@
       </div>
     </form>
   </div>
-
 </div>
-{/content}
+{% endblock %}

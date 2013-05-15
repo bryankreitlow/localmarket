@@ -8,7 +8,8 @@ var _ = require('underscore');
 module.exports = function (app, sharedContext, passport, auth) {
   "use strict";
 
-  app.get('/marketfinder', function (req, res) {
+  app.get('/marketfinder', function (req, res, next) {
+    var radius = (req.query.radius) ? (req.query.radius) : 25;
     var location;
     var markets;
     if(req.user && req.user.location) {
@@ -16,7 +17,7 @@ module.exports = function (app, sharedContext, passport, auth) {
     } else {
       location = (req.session.location) ? (req.session.location) : {lat: "false", long: "false"};
     }
-    listEntriesInRadius({entryType: 'Market', location: location, radius: 25}, function(err, entries) {
+    listEntriesInRadius({entryType: 'Market', location: location, radius: radius}, function(err, entries) {
       var marketLocations = [];
       if(err) {
         markets = [];
@@ -28,7 +29,7 @@ module.exports = function (app, sharedContext, passport, auth) {
           marketLocations.push({name: market.market.displayName, id: market._id, long: market.market.location[0], lat: market.market.location[1]});
         });
       }
-      res.render('marketfinder/marketfinder', buildPageContext(req,{location: location, entries: markets, marketLocations: JSON.stringify(marketLocations)}, sharedContext));
+      res.render('marketfinder/marketfinder', buildPageContext(req,{location: location, entries: markets, marketLocations: JSON.stringify(marketLocations), currentRadius: radius}, sharedContext));
     });
   });
 };

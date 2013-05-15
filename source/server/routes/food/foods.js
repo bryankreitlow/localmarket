@@ -10,14 +10,14 @@ var enums = Food.schema.path("type").enumValues;
 module.exports = function (app, sharedContext, passport, auth) {
   "use strict";
 
-  app.post('/food/add', auth.requiresModerator, function (req, res) {
+  app.post('/food/add', auth.requiresModerator, function (req, res, next) {
     var reqBody = req.body;
     var food = new Food({ name: reqBody.name, type : reqBody.type});
     // Save new suggestion
     food.save(function (err) {
       var message;
       if (err) {
-        message = err;
+        next(err);
       } else {
         message = 'Food ' + food.name + ' added, thank you ' + req.user.name.first + '.';
       }
@@ -29,12 +29,12 @@ module.exports = function (app, sharedContext, passport, auth) {
     res.render('food/AddFood', buildPageContext(req, {user: req.user, foodTypes: enums}, sharedContext));
   });
 
-  app.get('/foods', function (req, res) {
+  app.get('/foods', function (req, res, next) {
     var query = req.query;
     var sortOptions = _.pick(query, 'sort', 'order');
     listFoods(sortOptions, function(err, foods) {
       if(err) {
-        res.send(500);
+        next(err);
       } else {
         res.render('food/ListFoods', buildPageContext(req,{foods: foods, sortOptions: sortOptions}, sharedContext));
       }

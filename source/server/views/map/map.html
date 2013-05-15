@@ -1,18 +1,19 @@
-{>"core/layout"/}
+{% extends "core/layout.html" %}
 
-{<title}Map | LocalMart{/title}
+{% set View.Title = "LocalMart | Map" %}
 
-{<styles}
+{% block styles %}
 <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.5.1/leaflet.css" />
 <!--[if lte IE 8]>
   <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.5.1/leaflet.ie.css" />
 <![endif]-->
-{/styles}
-{<scripts}
+{% endblock %}
+
+{% block scripts%}
 <script type="text/javascript" src="http://cdn.leafletjs.com/leaflet-0.5.1/leaflet.js"></script>
 <script type="text/javascript">
   $(function(){
-    var location = {lat: {location.lat}, long: {location.long}};
+    var location = {lat: {{location.lat}}, long: {{location.long}}};
     var savedLocation = (location.lat && location.long) ? [location.lat, location.long] : false;
     var marker = L.marker();
     var map = L.map('map').setView([39.96487356336187, -93.49266517162323], 4);
@@ -40,7 +41,7 @@
       }
     });
 
-    L.tileLayer('http://{~lb}s{~rb}.tile.stamen.com/toner-lite/{~lb}z{~rb}/{~lb}x{~rb}/{~lb}y{~rb}.png', {
+    L.tileLayer('http://{s}.tile.stamen.com/toner-lite/{z}/{x}/{y}.png', {
       attribution:
               'Map tiles by <a href="http://stamen.com">Stamen Design</a>, <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> &mdash; ' +
                       'Map data &copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
@@ -56,9 +57,9 @@
     }
   });
 </script>
-{/scripts}
+{% endblock %}
 
-{<content}
+{% block content %}
 <div class="row-fluid" style="padding-top: 10px;">
   <div class="span12">
     <div class="span6 offset3">
@@ -76,4 +77,4 @@
 <div class="row-fluid" style="padding-top: 10px; padding-bottom: 20px;">
   <div id="map" style="height: 500px;"></div>
 </div>
-{/content}
+{% endblock %}

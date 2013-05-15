@@ -1,13 +1,13 @@
-{>"core/layout"/}
+{% extends "core/layout.html" %}
 
-{<title}Add Food | LocalMart{/title}
+{% set View.Title = "Add Food | LocalMart" %}
 
-{<content}
+{% block content %}
 <div class="row-fluid" style="padding-top: 20px;">
   <div class="span6 offset2 messages">
-    {?message}
-      {message}
-    {/message}
+    {% if message %}
+      {{message}}
+    {% endif %}
   </div>
   <div class="span6 offset2">
     <h2>Add a Food</h2>
@@ -27,9 +27,9 @@
             <label class="control-label">Type</label>
             <div class="controls">
               <select name="type" id="type">
-                {#foodTypes}
-                  <option value="{.}">{.}</option>
-                {/foodTypes}
+                {% for food in foodTypes %}
+                  <option value="{{food}}">{{food}}</option>
+                {% endfor %}
               </select>
             </div>
           </div>
@@ -41,6 +41,5 @@
       </div>
     </form>
   </div>
-
 </div>
-{/content}
+{% endblock %}

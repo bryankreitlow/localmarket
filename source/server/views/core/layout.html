@@ -1,36 +1,3 @@
-{!
-The base layout template for the new Sococo marketing site.
-
-This template is meant to be the base for individual page
-implementations across the site.  It exposes opportunities
-for customizing its content, while providing sane defaults
-to make basic pages a breeze to implement.
-
-Here's an example of how to implement your own page based
-on this layout, while overriding most of the base content.
-
-{>"core/layout"/}
-
-{<title}LocalMart | About Us{/title}
-
-{<meta}
-<meta name="keywords" content="local food, farmers market, recipe search">
-{/meta}
-
-{<styles}
-<link href="assets/css/contact-us-specific-styles.css" rel="stylesheet">
-{/styles}
-
-{<scripts}
-<script type="text/javascript" src="assets/js/path/page-specific-script.js"></script>
-<script type="text/javascript" src="assets/js/path/another-page-script.js"></script>
-{/scripts}
-
-{<content}
-<div class="contact-us">...</div>
-{/content}
-
-!}
 <!DOCTYPE html>
 <!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
 <!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
@@ -38,53 +5,56 @@ on this layout, while overriding most of the base content.
 <!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
 <head>
 <meta charset="utf-8">
-<title>
-{+title}LocalMart | Eat Local, Buy Local{/title}
-</title>
 
-{!
+  {# title is also a block in case you need to add logic when rendering, see publicprofile #}
+  {% block title %}
+    <title>
+      {{ View.Title }}
+    </title>
+  {% endblock %}
+
+{#
 Viewport meta tags are needed to ensure scroll bar don't show up on
 mobile devices.
-!}
+#}
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="author" content="LocalMart">
 <meta name="description" content="Eat local, Buy Local">
 <meta name="keywords" content="local food">
-{! If you've got custom head meta tags, you can specify them here!}
-{+meta}
-{/meta}
+{# If you've got custom head meta tags, you can specify them here #}
+  {% block meta %}{% endblock %}
 <link href="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.2/css/bootstrap-combined.min.css" rel="stylesheet">
 <style type="text/css">
 .navbar .brand { max-height: 40px; overflow: visible;padding-top: 0;padding-bottom: 0; }
 </style>
-{+styles}
-{/styles}
+{% block styles %}
+{% endblock %}
 </head>
 <body>
-{! Header view default !}
-{+header}
-{>"core/header"/}
-{/header}
+{# Header view default #}
+{% block header %}
+  {% include "core/header.html" %}
+{% endblock %}
 
-{! Body content !}
+{# Body content #}
 <div class="container-fluid">
-{+content}
-{/content}
+  {% block content %}
+  {% endblock %}
 
-{! Footer view default !}
-{+footer}
-{>"core/footer"/}
-{/footer}
+{# Footer view default #}
+  {% block footer %}
+  {% include "core/footer.html" %}
+  {% endblock %}
 
 <script src="http://code.jquery.com/jquery-1.8.2.js"></script>
 <script src="/assets/js/notifier/Notifier.js"></script>
 <script src="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.2/js/bootstrap.min.js"></script>
-{! Page specific scripts can be included here !}
-{+scripts}
-{/scripts}
+{# Page specific scripts can be included here #}
+  {% block scripts %}
+  {% endblock %}
 
-{! Add Google Analytics if the Environment is Production !}
-{?isProduction}
+{# Add Google Analytics if the Environment is Production #}
+{% if isProduction %}
   <script type="text/javascript">
     var _gaq = _gaq || [];
     _gaq.push(['_setAccount', 'UA-39552611-1']);
@@ -95,17 +65,17 @@ mobile devices.
       var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
     })();
   </script>
-{/isProduction}
+{% endif %}
 
-{!
+{#
 In IE7 debug builds, include Firebug Lite by default, because let's be
 honest, if you're using IE7, you're debugging a problem.
-!}
-{?debug}
+#}
+{% if debug %}
 <!--[if (gte IE 6)&(lte IE 8)]>
 <script type="text/javascript" src="https://getfirebug.com/firebug-lite.js"></script>
 <![endif]-->
-{/debug}
+{% endif %}
 </div>
 </body>
 </html>

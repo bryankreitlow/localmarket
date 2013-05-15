@@ -2,9 +2,11 @@
 "use strict";
 
 var express = require('express.io'),
+  path = require('path'),
   mongoStore = require('connect-mongo')(express),
   flash = require('connect-flash'),
-  consolidate = require('consolidate');
+  consolidate = require('consolidate'),
+  swig = require('swig');
 
 module.exports = function (app, config, passport) {
   app.set('showStackError', true);
@@ -22,9 +24,8 @@ module.exports = function (app, config, passport) {
 
   // set views path, template engine and default layout
   app.set('views', 'views');
-  app.set('view engine', 'dust');
-  app.set("view options", { layout: "layout" });
-  app.engine('dust', consolidate.dust);
+  app.set('view engine', 'html');
+  app.engine('.html', consolidate.swig);
 
   app.configure(function () {
     // cookieParser should be above session
@@ -44,6 +45,17 @@ module.exports = function (app, config, passport) {
         collection : (config.isProduction()) ? 'sessions' : 'devsessions'
       })
     }));
+
+    // NOTE: Swig requires some extra setup
+    // This helps it know where to look for includes and parent templates
+    swig.init({
+      root: path.join(__dirname, '../views'),
+      cache: false,
+//      tags: {
+//        imgsrc:require('../swig/imgsrc.js')
+//      },
+      allowErrors: true // allows errors to be thrown and caught by express instead of suppressed by Swig
+    });
 
     // connect flash for flash messages
     app.use(flash());

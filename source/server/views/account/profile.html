@@ -1,12 +1,11 @@
-{>"core/layout"/}
+{% extends "core/layout.html" %}
 
-{<title}Account Profile | LocalMart{/title}
+{% set View.Title = "LocalMart | Account Profile" %}
 
-{<content}
+{% block content %}
 <div class="row-fluid" style="padding-top: 20px;">
   <div class="span6 offset1">
     <h2>Account Profile</h2>
-  {#user}
   <div class="well">
       <ul class="nav nav-tabs">
         <li class="active"><a href="#home" data-toggle="tab">Profile</a></li>
@@ -16,19 +15,19 @@
       <div class="tab-pane active in" id="home">
         <form id="tab">
           <label>Email</label>
-          <input type="text" value="{email}" class="input-xlarge">
+          <input type="text" value="{{user.email}}" class="input-xlarge">
           <label>First Name</label>
-          <input type="text" value="{name.first}" class="input-xlarge">
+          <input type="text" value="{{user.name.first}}" class="input-xlarge">
           <label>Last Name</label>
-          <input type="text" value="{name.last}" class="input-xlarge">
+          <input type="text" value="{{user.name.last}}" class="input-xlarge">
           <label>Location</label>
-          {?location}
+          {% if user.location %}
             <i>Location Has Been Set</i>
-          {:else}
+          {% else %}
             <i>Location Not Set. <a href="/map">Click Here</a>.</i>
-          {/location}
+          {% endif %}
           <label>Account Type</label>
-            <i>{capability}</i>
+            <i>{{user.capability}}</i>
           <label>Time Zone</label>
           <select name="timezone" id="DropDownTimezone" class="input-xlarge">
             <option value="-12.0">(GMT -12:00) Eniwetok, Kwajalein</option>
@@ -82,6 +81,5 @@
         </form>
       </div>
     </div>
-  {/user}
 </div>
-{/content}
+{% endblock %}

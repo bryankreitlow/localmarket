@@ -1,0 +1,34 @@
+{% extends "core/layout.html" %}
+
+{% block title %}
+  <title>
+    LocalMart | {% if contributor %}{{contributor.name.first}}'s User Profile{% else %}Profile Not Found{% endif %}
+  </title>
+{% endblock %}
+
+{% block content %}
+<div class="row-fluid" style="padding-top: 20px;">
+  <div class="span12 well">
+  <div class="span6 offset2">
+  {% if contributor %}
+    <div class="row">
+      <div class="span2">
+        <div class="thumbnail">
+          <img style="background-color: {{contributor.color}};" src="/assets/images/account/applemask64gray.png" alt="LocalMart Contributor">
+        </a>
+      </div>
+      <div class="span3">
+        <p>{{ contributor.capability }}</p>
+        <p><strong>{{ contributor.name.first }}</strong></p>
+        <span class=" badge badge-success">{{ contributor.entries.length }} entries</span>
+        <span class=" badge badge-warning">{{ contributor.followers.length }} followers</span>
+        <span class=" badge badge-info">{{ contributor.following.length }} following</span>
+      </div>
+    </div>
+  {% else %}
+    <h2>Contributor Not Found!</h2>
+  {% endif %}
+  </div>
+  </div>
+</div>
+{% endblock %}

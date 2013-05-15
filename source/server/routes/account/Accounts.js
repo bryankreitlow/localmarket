@@ -8,12 +8,12 @@ var _ = require('underscore');
 module.exports = function(app, sharedContext, passport, auth) {
   "use strict";
 
-  app.get('/accounts', function(req, res){
+  app.get('/accounts', auth.requiresAdmin, function(req, res, next){
     var query = req.query;
     var sortOptions = _.pick(query, 'sort', 'order');
     listContributors(sortOptions, function(err, accounts) {
       if(err) {
-        res.send(404);
+        next(err);
       } else {
         res.render('account/list', buildPageContext(req,{accounts: accounts, sortOptions: sortOptions}, sharedContext));
       }
@@ -41,21 +41,21 @@ module.exports = function(app, sharedContext, passport, auth) {
     res.render('account/profile', buildPageContext(req, {user: req.user}, sharedContext));
   });
 
-  app.get('/contributor/:id', function(req, res) {
-    Contributor.findById(req.params.id).select("name creationDate color entries followers following").exec(function(err, contributor) {
+  app.get('/contributor/:id', function(req, res, next) {
+    Contributor.findById(req.params.id).select("name creationDate color entries followers following capability").exec(function(err, contributor) {
       if(err) {
-        return res.send(404);
+        next(err);
       }
       return res.render('account/publicProfile', buildPageContext(req, {contributor: contributor}, sharedContext));
     });
   });
 
-  app.post('/account/updateLocation', function(req, res){
+  app.post('/account/updateLocation', function(req, res, next){
     var body = req.body;
     if(req.user) {
       req.user.setLocation([body.long, body.lat], function(err) {
         if(err) {
-          res.send(404);
+          next(err);
         }
         res.send(200);
       });
@@ -69,19 +69,19 @@ module.exports = function(app, sharedContext, passport, auth) {
     res.render('account/signup', buildPageContext(req, sharedContext));
   });
 
-  app.post('/account/signup', function(req, res) {
+  app.post('/account/signup', function(req, res, next) {
     var reqBody = req.body;
     var contributor = new Contributor({ name: { first: reqBody.first, last: reqBody.last }, email: reqBody.email, password: reqBody.password, color: reqBody.color, creationDate: new Date()});
     // Check if account already exists
     Contributor.find({ email: reqBody.email }).exec(function(err, accounts) {
       if(err) {
-        res.send(404);
+        next(err);
       } else {
         // No Account Found
         if(!accounts.length) {
           contributor.save(function(err, contributor) {
             if(err) {
-              res.end('Failed to Create Account');
+              next(err);
             } else {
               res.end('Account added for ' + contributor.name.first);
             }

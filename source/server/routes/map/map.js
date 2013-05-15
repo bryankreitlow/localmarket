@@ -20,11 +20,11 @@ module.exports = function(app, sharedContext) {
     res.render('map/oldmap', buildPageContext(req, { page: 'map' }, sharedContext));
   });
 
-  app.get('/map/:state', function(req, res){
+  app.get('/map/:state', function(req, res, next){
     var state = req.params.state;
     var stateName = stateList[state];
     if(stateName === undefined ) {
-      res.send(403, 'Sorry! This does not appear to be a valid state.');
+      next(new Error('Sorry! This does not appear to be a valid state.'));
     } else {
       res.render('state', buildPageContext(req, { state: stateName }, sharedContext));
     }
