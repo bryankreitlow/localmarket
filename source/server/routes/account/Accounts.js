@@ -57,12 +57,16 @@ module.exports = function(app, sharedContext, passport, auth) {
     var oldPass = req.body.oldPass;
     var newPass = req.body.newPass;
     var newPassR = req.body.newPassRepeat;
+    var complete = function() {
+      res.render('account/profile', buildPageContext(req, {currentTab: "password", error: error, success: success, user: req.user}, sharedContext));
+    };
     req.user.comparePassword(oldPass, function(err, isMatch) {
       if(err) {
         next(err);
       }
       if(!isMatch) {
         error = "Old Password Incorrect";
+        complete();
       } else {
         if(oldPass === newPass) {
           error = "Password must be changed";
@@ -76,10 +80,10 @@ module.exports = function(app, sharedContext, passport, auth) {
               next(err);
             }
             success = "Password Changed Successfully";
-            res.render('account/profile', buildPageContext(req, {currentTab: "password", error: error, success: success, user: req.user}, sharedContext));
+            complete();
           });
         } else {
-          res.render('account/profile', buildPageContext(req, {currentTab: "password", error: error, success: success, user: req.user}, sharedContext));
+          complete();
         }
       }
     });
