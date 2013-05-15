@@ -21,7 +21,9 @@ module.exports = function(app, sharedContext, passport, auth) {
   });
 
   app.get('/login', function(req, res) {
-    res.render('account/login', buildPageContext(req, req.flash(), sharedContext));
+    var url = req.query.url;
+    var flash = req.flash();
+    res.render('account/login', buildPageContext(req, {flash: flash, url: url}, sharedContext));
   });
 
   app.post('/login', passport.authenticate('local', {failureRedirect: '/login', failureFlash: true, successFlash: 'Welcome!'}), function(req, res) {
@@ -29,7 +31,11 @@ module.exports = function(app, sharedContext, passport, auth) {
     if(req.body.rememberme) {
       req.session.cookie.maxAge = 30 * 24 * 60 * 60 * 1000;
     }
-    res.redirect('/profile');
+    if(req.body.url) {
+      res.redirect(req.body.url);
+    } else {
+      res.redirect('/profile');
+    }
   });
 
   app.get('/logout', function(req, res) {
@@ -39,6 +45,44 @@ module.exports = function(app, sharedContext, passport, auth) {
 
   app.get('/profile', auth.requiresLogin, function(req, res) {
     res.render('account/profile', buildPageContext(req, {user: req.user}, sharedContext));
+  });
+
+  app.post('/profile', auth.requiresLogin, function(req, res) {
+
+  });
+
+  app.post('/profile/updatepassword', auth.requiresLogin, function(req, res, next) {
+    var error = false;
+    var success = false;
+    var oldPass = req.body.oldPass;
+    var newPass = req.body.newPass;
+    var newPassR = req.body.newPassRepeat;
+    req.user.comparePassword(oldPass, function(err, isMatch) {
+      if(err) {
+        next(err);
+      }
+      if(!isMatch) {
+        error = "Old Password Incorrect";
+      } else {
+        if(oldPass === newPass) {
+          error = "Password must be changed";
+        } else if (newPass !== newPassR) {
+          error = "Repeat Passwords Must Match";
+        }
+        if(!error) {
+          req.user.password = newPass;
+          req.user.save(function(err) {
+            if(err) {
+              next(err);
+            }
+            success = "Password Changed Successfully";
+            res.render('account/profile', buildPageContext(req, {currentTab: "password", error: error, success: success, user: req.user}, sharedContext));
+          });
+        } else {
+          res.render('account/profile', buildPageContext(req, {currentTab: "password", error: error, success: success, user: req.user}, sharedContext));
+        }
+      }
+    });
   });
 
   app.get('/contributor/:id', function(req, res, next) {

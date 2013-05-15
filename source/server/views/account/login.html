@@ -5,8 +5,8 @@
 {% block content %}
 <div class="row-fluid" style="padding-top: 20px;">
   <div class="span6 offset3">
-  {% if error %}
-    <span class="help-block">{error}</span>
+  {% if flash.error %}
+    <span class="help-block">{{flash.error}}</span>
   {% endif %}
   <form method="post">
     <div class="controls-row">
@@ -27,6 +27,7 @@
         <span class="help-block hide"></span>
       </div>
     </div>
+    <input type="hidden" name="url" value="{{url}}" >
     <div class="controls-row create-row">
       <button class="span4 btn-create btn btn-large btn-primary" type="submit">Login</button>
     </div>

@@ -43,6 +43,9 @@ var MarketSchema = new mongoose.Schema({
     type: [Number],
     index: '2d'
   },
+  website: {
+    type: String
+  },
   vendors: [{
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Vendor',

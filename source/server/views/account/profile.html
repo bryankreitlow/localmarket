@@ -6,13 +6,24 @@
 <div class="row-fluid" style="padding-top: 20px;">
   <div class="span6 offset1">
     <h2>Account Profile</h2>
+    {% if error %}
+    <div class="alert alert-error" data-alert="alert">
+      <a class="close" onclick="$('.alert').hide()">×</a>
+      <p><strong>{{error}}</strong></p>
+    </div>
+    {% else if success %}
+    <div class="alert alert-success" data-alert="alert">
+      <a class="close" onclick="$('.alert').hide()">×</a>
+      <p><strong>{{success}}</strong></p>
+    </div>
+    {% endif %}
   <div class="well">
-      <ul class="nav nav-tabs">
-        <li class="active"><a href="#home" data-toggle="tab">Profile</a></li>
-        <li><a href="#profile" data-toggle="tab">Password</a></li>
-      </ul>
+    <ul class="nav nav-tabs">
+      <li {% if currentTab !== "password" %}class="active"{% endif %}><a href="#home" data-toggle="tab">Profile</a></li>
+      <li {% if currentTab === "password" %}class="active"{% endif %}><a href="#profile" data-toggle="tab">Password</a></li>
+    </ul>
     <div id="myTabContent" class="tab-content">
-      <div class="tab-pane active in" id="home">
+      <div class="tab-pane {% if currentTab !== "password" %}active in{% else %}fade{% endif %}" id="home">
         <form id="tab">
           <label>Email</label>
           <input type="text" value="{{user.email}}" class="input-xlarge">
@@ -67,19 +78,21 @@
           </div>
         </form>
       </div>
-      <div class="tab-pane fade" id="profile">
-        <form id="tab2">
+      <div class="tab-pane {% if currentTab === "password" %}active in{% else %}fade{% endif %}" id="profile">
+        <form id="tab2" method="post" action="/profile/updatepassword">
           <label>Old Password</label>
-          <input type="password" class="input-xlarge">
+          <input type="password" name="oldPass" class="input-xlarge">
           <label>New Password</label>
-          <input type="password" class="input-xlarge">
+          <input type="password" name="newPass" class="input-xlarge">
           <label>New Password (Repeat)</label>
-          <input type="password" class="input-xlarge">
+          <input type="password" name="newPassRepeat" class="input-xlarge">
           <div>
             <button class="btn btn-primary" type="submit">Update</button>
           </div>
         </form>
       </div>
     </div>
+  </div>
+  </div>
 </div>
 {% endblock %}

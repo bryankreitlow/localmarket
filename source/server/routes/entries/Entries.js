@@ -52,6 +52,7 @@ module.exports = function(app, sharedContext, passport, auth) {
         var market = new Market({
           name: reqBody.name,
           displayName: reqBody.name,
+          website: reqBody.website,
           addressLine1: reqBody.addressLine1,
           addressLine2: reqBody.addressLine2,
           city: reqBody.city,
