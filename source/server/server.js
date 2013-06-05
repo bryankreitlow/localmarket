@@ -87,6 +87,7 @@ if (!debugEnv && cluster.isMaster) {
       var app = express().http().io(),
         buildPageContext = require('./routes/utils/ContextUtil').buildPageContext,
         mapRoutes = require('./routes/map/map'),
+        apiproxy = require('./routes/api/ApiProxy'),
         accountRoutes = require('./routes/account/Accounts'),
         marketfinderRoutes = require('./routes/marketfinder/MarketFinder'),
         marketingRoutes = require('./routes/marketing/Marketing'),
@@ -112,6 +113,7 @@ if (!debugEnv && cluster.isMaster) {
       mapRoutes(app, sharedContext);
       accountRoutes(app, sharedContext, passport, auth);
       entryRoutes(app, sharedContext, passport, auth);
+//      apiproxy(app, sharedContext, passport, auth);
       marketfinderRoutes(app, sharedContext, passport, auth);
       suggestionRoutes(app, sharedContext, passport, auth);
       foodRoutes(app, sharedContext, passport, auth);
@@ -127,22 +129,22 @@ if (!debugEnv && cluster.isMaster) {
 
       // log errors
       app.use(function errorHandler(err, req, res, next) {
-        try {
-          logger.error("Node error:", LogCategory);
-          logger.error(err.stack, LogCategory);
-          logger.error("Request:", LogCategory);
-          logger.error(JSON.stringify(_.pick(req, "httpVersion", "method", "originalUrl", "body", "params", "headers"), undefined, "  "), LogCategory);
-          logger.error("Response:", LogCategory);
-          logger.error(JSON.stringify(_.pick(res, "statusCode", "body", "output", "_headers"), undefined, "  "), LogCategory);
-        }
-        catch (exception) {
-          // hope this doesn't happen very often...
-          console.log(exception);
-        }
         if(err instanceof NotFound) {
           console.log('[Page Not Found] ' + req.originalUrl);
           res.status(404).render('error/404', buildPageContext(req, sharedContext));
         } else {
+          try {
+            logger.error("Node error:", LogCategory);
+            logger.error(err.stack, LogCategory);
+            logger.error("Request:", LogCategory);
+            logger.error(JSON.stringify(_.pick(req, "httpVersion", "method", "originalUrl", "body", "params", "headers"), undefined, "  "), LogCategory);
+            logger.error("Response:", LogCategory);
+            logger.error(JSON.stringify(_.pick(res, "statusCode", "body", "output", "_headers"), undefined, "  "), LogCategory);
+          }
+          catch (exception) {
+            // hope this doesn't happen very often...
+            console.log(exception);
+          }
           console.log('[Internal Server Error] ' + req.originalUrl);
           res.status(500).render('error/500', buildPageContext(req, { error: err.stack }, sharedContext));
         }

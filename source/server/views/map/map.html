@@ -11,6 +11,8 @@
 
 {% block scripts%}
 <script type="text/javascript" src="http://cdn.leafletjs.com/leaflet-0.5.1/leaflet.js"></script>
+<script type="text/javascript" src="/assets/js/common/localmart.js"></script>
+<script type="text/javascript" src="/assets/js/common/map/icons.js"></script>
 <script type="text/javascript">
   $(function(){
     var location = {lat: {{location.lat}}, long: {{location.long}}};
@@ -30,6 +32,7 @@
           $('#selectSpot').removeClass('active');
           locationTip.addClass('hide');
           marker.setLatLng(e.latlng);
+          market.setIcon(localmart.me);
           if(!savedLocation) {
             marker.addTo(map);
           }
@@ -53,6 +56,7 @@
     if(savedLocation) {
       marker.setLatLng(savedLocation);
       marker.addTo(map);
+      marker.setIcon(localmart.me);
       map.panTo(savedLocation);
     }
   });

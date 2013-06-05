@@ -20,13 +20,14 @@ module.exports = function (app, sharedContext, passport, auth) {
     listEntriesInRadius({entryType: 'Market', location: location, radius: radius}, function(err, entries) {
       var marketLocations = [];
       if(err) {
+        console.log(err);
         markets = [];
       } else {
         markets = _.filter(entries, function(entry) {
           return entry.market !== null;
         });
         _.forEach(markets, function(market) {
-          marketLocations.push({name: market.market.displayName, id: market._id, long: market.market.location[0], lat: market.market.location[1]});
+          marketLocations.push({name: market.market.displayName, id: market._id, long: market.market.location[0], lat: market.market.location[1] });
         });
       }
       res.render('marketfinder/marketfinder', buildPageContext(req,{location: location, entries: markets, marketLocations: JSON.stringify(marketLocations), currentRadius: radius}, sharedContext));

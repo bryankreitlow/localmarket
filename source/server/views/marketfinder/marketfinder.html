@@ -21,6 +21,8 @@
 
 {% block scripts %}
 <script type="text/javascript" src="http://cdn.leafletjs.com/leaflet-0.5.1/leaflet.js"></script>
+<script type="text/javascript" src="/assets/js/common/localmart.js"></script>
+<script type="text/javascript" src="/assets/js/common/map/icons.js"></script>
 <script type="text/javascript">
   $(function(){
   var location = {lat: {{location.lat}}, long: {{location.long}}};
@@ -41,12 +43,13 @@
   if(savedLocation) {
     marker.setLatLng(savedLocation);
     marker.addTo(map);
+    marker.setIcon(localmart.me);
     map.panTo(savedLocation);
   }
 
   if(marketLocations) {
     $.each(marketLocations, function(index, marketLocation) {
-      var marketmarker = new L.marker([marketLocation.lat, marketLocation.long],{title: marketLocation.name, riseOnHover: true});
+      var marketmarker = new L.marker([marketLocation.lat, marketLocation.long],{title: marketLocation.name, riseOnHover: true, icon: localmart.market});
       marketmarker.bindPopup('<a href="/market/' + marketLocation.id + '">' + marketLocation.name + '</a>');
       marketmarker.addTo(map);
     });

@@ -1,0 +1,48 @@
+<h2>Add a Vendor</h2>
+<form method="post">
+<input type="hidden" name="type" value="Vendor" />
+<div class="controls-row">
+  <div class="control-group span6">
+    <label class="control-label">
+      <span>Name*</span>
+      <input class="span12" type="text" name="name">
+    </label>
+    <span class="help-block hide"></span>
+  </div>
+</div>
+<!-- phone input-->
+<div class="controls-row">
+  <div class="control-group span6">
+    <label class="control-label">
+      <span>Phone Number</span>
+      <input id="phone" name="phoneNumber" type="text" placeholder="Business Phone"
+             class="span12">
+    </label>
+    <span class="help-block">e.g. (555) 555-5555</span>
+  </div>
+</div>
+<!-- website address input-->
+<div class="controls-row">
+  <div class="control-group span6">
+    <label class="control-label">
+      <span>Website Address</span>
+      <input id="web-address" name="website" type="text" placeholder="website URL"
+             class="span12">
+    </label>
+    <span class="help-block">e.g. http://www.burtsbeets.com/</span>
+  </div>
+</div>
+<!-- description input-->
+<div class="controls-row">
+  <div class="control-group span6">
+    <label class="control-label">
+      <span>Description</span>
+      <textarea cols="40" rows="5" name="description" placeholder="Describe The Vendor" class="span12"></textarea>
+    </label>
+    <span class="help-block hide"></span>
+  </div>
+</div>
+<div class="controls-row create-row">
+  <button class="span4 btn-create btn btn-large btn-primary" type="submit">Add Vendor</button>
+</div>
+</form>

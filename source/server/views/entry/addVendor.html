@@ -1,0 +1,16 @@
+{% extends "core/layout.html" %}
+
+{% set View.Title = "LocalMart | Add Vendor" %}
+
+{% block content %}
+<div class="row-fluid" style="padding-top: 20px;">
+  <div class="span6 offset2 messages">
+    {% if message %}
+    {{message}}
+    {% endif %}
+  </div>
+  <div class="span6 offset2">
+    {% include "entry/entryTypes/vendor.html" %}
+  </div>
+</div>
+{% endblock %}

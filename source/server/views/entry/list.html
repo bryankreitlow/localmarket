@@ -10,6 +10,8 @@
         - <a href="/recipe/{{entry._id}}">Link</a>
       {% else if entry.type == "Market" %}
         - <a href="/market/{{entry._id}}">Link</a>
+      {% else if entry.type == "Vendor" %}
+      - <a href="/vendor/{{entry._id}}">Link</a>
       {% else if entry.type == "Event" %}
         - <a href="/event/{{entry._id}}">Link</a>
       {% endif %}

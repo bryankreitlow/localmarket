@@ -12,7 +12,7 @@ var EntrySchema = new mongoose.Schema({
     index: true
   },
   type: {
-    type: String, enum: ['Recipe', 'Market', 'Event'],
+    type: String, enum: ['Recipe', 'Market', 'Event', 'Vendor'],
     index: true,
     required: true
   },
@@ -27,6 +27,10 @@ var EntrySchema = new mongoose.Schema({
   event: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Event'
+  },
+  vendor: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Vendor'
   }
 });
 

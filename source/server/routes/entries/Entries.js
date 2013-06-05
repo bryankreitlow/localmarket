@@ -3,7 +3,7 @@
 var Entry = require('../../models/Entry').Model;
 var geocode = require('../../util/Geocode').geocodeAddress;
 var Market = require('../../models/Market').Model;
-var marketMethods = require('../../models/Market').Methods;
+var Vendor = require('../../models/Vendor').Model;
 var listEntries = require('../../models/Entry').Methods.listEntries;
 var buildPageContext = require('../utils/ContextUtil').buildPageContext;
 var _ = require('underscore');
@@ -44,8 +44,8 @@ module.exports = function(app, sharedContext, passport, auth) {
         next(err);
       } else {
         message = type + " Added.";
+        res.render('entry/AddEntry', buildPageContext(req, {user: req.user, message: message, entryTypes: enums}, sharedContext));
       }
-      res.render('entry/AddEntry', buildPageContext(req, {user: req.user, message: message, entryTypes: enums}, sharedContext));
     };
     switch(type) {
       case "Market":
@@ -62,6 +62,7 @@ module.exports = function(app, sharedContext, passport, auth) {
         });
         geocode(getAddress(market), function(err, body) {
           if(err) { //If error geocoding continue
+            console.log('Error Geocoding Address: ' + getAddress(market));
           } else { //Set lat lng from address
             //console.log(body.results[0].address_components);
             if(body.results[0] && body.results[0].geometry && body.results[0].geometry.location) {
@@ -89,23 +90,104 @@ module.exports = function(app, sharedContext, passport, auth) {
         });
         break;
       case "Recipe":
-        completed("Type " + type + " Not Yet Defined");
+        completed(new Error("Type " + type + " Not Yet Supported"));
+        break;
+      case "Vendor":
+        completed(new Error("Type " + type + " Not Yet Supported"));
         break;
       case "Event":
-        completed("Type " + type + " Not Yet Defined");
+        completed(new Error("Type " + type + " Not Yet Supported"));
         break;
       default:
-        completed("Cannot Process Request, No Definition for Type " + type);
+        completed(new Error("Cannot Process Request, No Definition for Type " + type));
     }
   });
 
-  app.get('/market/:id', function(req, res, next) {
-    Entry.findById(req.params.id).populate('market').exec(function(err, entry) {
-      var location = (entry.market.location[0]) ? entry.market.location : [null, null];
+  app.get('/vendor/:id/add', auth.requiresLogin, function(req, res, next) {
+      Entry.findById(req.params.id).populate('market').exec(function(err, entry) {
+        if(err) {
+          next(err);
+        }
+        if(!entry) {
+          next();
+        } else if(entry && entry.type !== "Market") {
+          next(new Error('A Vendor Can Only be Added to a Market'));
+        } else {
+          var location = (entry && entry.market && entry.market.location[0]) ? entry.market.location : [null, null];
+          return res.render('entry/addVendor', buildPageContext(req, {entry: entry, lat: location[1], long: location[0]}, sharedContext));
+        }
+      });
+  });
+
+  app.post('/vendor/:id/add', auth.requiresLogin, function(req, res, next) {
+    var reqBody = req.body;
+    Entry.findById(req.params.id).populate('market').populate('market.vendors').exec(function(err, entry) {
       if(err) {
         next(err);
       }
-      return res.render('entry/viewMarket', buildPageContext(req, {entry: entry, lat: location[1], long: location[0]}, sharedContext));
+      if(!entry) {
+        next();
+      } else if(entry && entry.type !== "Market") {
+        next(new Error('A Vendor Can Only be Added to a Market'));
+      } else {
+        var vendor = new Vendor({
+          name: reqBody.name,
+          displayName: reqBody.name,
+          website: reqBody.website,
+          description: reqBody.description,
+          phoneNumber: reqBody.phoneNumber,
+          _markets: [
+            entry.market._id
+          ]
+        });
+        vendor.save(function(err) {
+          if(err) {
+            next(err);
+          } else {
+            entry.market._vendors.push(vendor._id);
+            entry.market.save(function(err) {
+              if(err) {
+                next(err);
+              } else {
+                var newentry = new Entry({ type: 'Vendor', _contributor: req.user._id, vendor: vendor._id });
+                newentry.save(function(err) {
+                  if(err) {
+                    next(err);
+                  } else {
+                    var location = (entry && entry.market && entry.market.location[0]) ? entry.market.location : [null, null];
+                    return res.render('entry/addVendor', buildPageContext(req, {entry: entry, message: 'Vendor ' + vendor.displayName + ' Added.', lat: location[1], long: location[0]}, sharedContext));
+                  }
+                });
+              }
+            });
+          }
+        });
+      }
+    });
+  });
+
+  app.get('/market/:id', function(req, res, next) {
+    Entry.findById(req.params.id).populate('market').populate('market._vendors', ["name"]).exec(function(err, entry) {
+      if(err) {
+        next(err);
+      }
+      if(!entry) {
+        next();
+      } else if(entry && entry.type !== "Market") {
+        next();
+      } else {
+        Vendor.populate(entry.market,{
+          path: '_vendors',
+          select: 'displayName description'
+        }, function(err) {
+          if(err) {
+            next(err);
+          } else {
+            var location = (entry.market.location[0]) ? entry.market.location : [null, null];
+            return res.render('entry/viewMarket', buildPageContext(req, {entry: entry, lat: location[1], long: location[0]}, sharedContext));
+          }
+        });
+      }
     });
   });
 
@@ -114,7 +196,11 @@ module.exports = function(app, sharedContext, passport, auth) {
       if(err) {
         next(err);
       }
-      return res.render('entry/viewEntry', buildPageContext(req, {entry: entry}, sharedContext));
+      if(!entry) {
+        next();
+      } else {
+        return res.render('entry/viewEntry', buildPageContext(req, {entry: entry}, sharedContext));
+      }
     });
   });
 

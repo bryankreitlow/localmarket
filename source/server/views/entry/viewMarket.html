@@ -15,6 +15,8 @@
 
 {% block scripts %}
 <script type="text/javascript" src="http://cdn.leafletjs.com/leaflet-0.5.1/leaflet.js"></script>
+<script type="text/javascript" src="/assets/js/common/localmart.js"></script>
+<script type="text/javascript" src="/assets/js/common/map/icons.js"></script>
 <script type="text/javascript">
   $(function(){
   var location = {lat: {% if lat %}{{lat}}{% else %}undefined{% endif %}, long: {% if long %}{{long}}{% else %}undefined{% endif %} };
@@ -45,6 +47,7 @@
   if(savedLocation) {
     marker.setLatLng(savedLocation);
     marker.addTo(map);
+    marker.setIcon(localmart.market);
     map.panTo(savedLocation);
   }
   });
@@ -57,7 +60,15 @@
     <img src="/assets/images/marketbanner.png">
     <h2 style="margin-left: 50px;">{{entry.market.displayName}}</h2>
     <div class="span5">
-      Vendors Go Here
+      {% for vendor in entry.market._vendors %}
+        {% if loop.first %}<a href="/vendor/{{ entry._id }}/add" class="btn btn-primary">Add New Vendor</a><dl class="dl-horizontal">{% endif %}
+          <dt><a href="/vendor/{{ vendor._id }}">{{ vendor.displayName }}</a></dt>
+          <dd>{{ vendor.description }}</dd>
+        {% if loop.last %}</dl>{% endif %}
+      {% else %}
+      <p>No Vendors</p>
+      <a href="/vendor/{{ entry._id }}/add" class="btn btn-primary">Add a Vendor</a>
+      {% endfor %}
     </div>
     <div class="span5">
       <div id="map" style="height: 300px;"></div>
