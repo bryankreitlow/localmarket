@@ -87,7 +87,7 @@ if (!debugEnv && cluster.isMaster) {
       var app = express().http().io(),
         buildPageContext = require('./routes/utils/ContextUtil').buildPageContext,
         mapRoutes = require('./routes/map/map'),
-        apiproxy = require('./routes/api/ApiProxy'),
+       // apiproxy = require('./routes/api/ApiProxy'),
         accountRoutes = require('./routes/account/Accounts'),
         marketfinderRoutes = require('./routes/marketfinder/MarketFinder'),
         marketingRoutes = require('./routes/marketing/Marketing'),
