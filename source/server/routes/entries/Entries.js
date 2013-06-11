@@ -5,7 +5,6 @@ var geocode = require('../../util/Geocode').geocodeAddress;
 var Market = require('../../models/Market').Model;
 var Vendor = require('../../models/Vendor').Model;
 var listEntries = require('../../models/Entry').Methods.listEntries;
-var buildPageContext = require('../utils/ContextUtil').buildPageContext;
 var _ = require('underscore');
 
 var enums = Entry.schema.path("type").enumValues;
@@ -15,9 +14,9 @@ var getAddress = function(market) {
   var address = [];
   address.push(market.addressLine1, market.addressLine2, market.city, market.region, market.postalCode, market.country);
   return address.join(' ');
-}
+};
 
-module.exports = function(app, sharedContext, passport, auth) {
+module.exports = function(app, buildPageContext, passport, auth) {
   "use strict";
 
   app.get('/entries', function(req, res, next){
@@ -27,13 +26,13 @@ module.exports = function(app, sharedContext, passport, auth) {
       if(err) {
         next(err);
       } else {
-        res.render('entry/list', buildPageContext(req,{entries: entries, sortOptions: sortOptions}, sharedContext));
+        res.render('entry/list', buildPageContext(req,{entries: entries, sortOptions: sortOptions}));
       }
     });
   });
 
   app.get('/entry/add', auth.requiresLogin, function (req, res) {
-    res.render('entry/AddEntry', buildPageContext(req, {user: req.user, entryTypes: enums}, sharedContext));
+    res.render('entry/AddEntry', buildPageContext(req, {user: req.user, entryTypes: enums}));
   });
 
   app.post('/entry/add', auth.requiresLogin, function(req, res, next){
@@ -44,7 +43,7 @@ module.exports = function(app, sharedContext, passport, auth) {
         next(err);
       } else {
         message = type + " Added.";
-        res.render('entry/AddEntry', buildPageContext(req, {user: req.user, message: message, entryTypes: enums}, sharedContext));
+        res.render('entry/AddEntry', buildPageContext(req, {user: req.user, message: message, entryTypes: enums}));
       }
     };
     switch(type) {
@@ -114,7 +113,7 @@ module.exports = function(app, sharedContext, passport, auth) {
           next(new Error('A Vendor Can Only be Added to a Market'));
         } else {
           var location = (entry && entry.market && entry.market.location[0]) ? entry.market.location : [null, null];
-          return res.render('entry/addVendor', buildPageContext(req, {entry: entry, lat: location[1], long: location[0]}, sharedContext));
+          return res.render('entry/addVendor', buildPageContext(req, {entry: entry, lat: location[1], long: location[0]}));
         }
       });
   });
@@ -155,7 +154,7 @@ module.exports = function(app, sharedContext, passport, auth) {
                     next(err);
                   } else {
                     var location = (entry && entry.market && entry.market.location[0]) ? entry.market.location : [null, null];
-                    return res.render('entry/addVendor', buildPageContext(req, {entry: entry, message: 'Vendor ' + vendor.displayName + ' Added.', lat: location[1], long: location[0]}, sharedContext));
+                    return res.render('entry/addVendor', buildPageContext(req, {entry: entry, message: 'Vendor ' + vendor.displayName + ' Added.', lat: location[1], long: location[0]}));
                   }
                 });
               }
@@ -184,7 +183,7 @@ module.exports = function(app, sharedContext, passport, auth) {
             next(err);
           } else {
             var location = (entry.market.location[0]) ? entry.market.location : [null, null];
-            return res.render('entry/viewMarket', buildPageContext(req, {entry: entry, lat: location[1], long: location[0]}, sharedContext));
+            return res.render('entry/viewMarket', buildPageContext(req, {entry: entry, lat: location[1], long: location[0]}));
           }
         });
       }
@@ -199,7 +198,7 @@ module.exports = function(app, sharedContext, passport, auth) {
       if(!entry) {
         next();
       } else {
-        return res.render('entry/viewEntry', buildPageContext(req, {entry: entry}, sharedContext));
+        return res.render('entry/viewEntry', buildPageContext(req, {entry: entry}));
       }
     });
   });

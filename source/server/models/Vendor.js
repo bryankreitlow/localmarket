@@ -60,6 +60,8 @@ VendorSchema.methods = {
 };
 
 module.exports = {
+  Name: 'Vendor',
+  Schema: VendorSchema,
   Model: Vendor,
   Methods: VendorSchema.methods
 };

@@ -2,10 +2,9 @@
 
 var Contributor = require('../../models/Contributor').Model;
 var listContributors = require('../../models/Contributor').Methods.listContributors;
-var buildPageContext = require('../utils/ContextUtil').buildPageContext;
 var _ = require('underscore');
 
-module.exports = function(app, sharedContext, passport, auth) {
+module.exports = function(app, buildPageContext, passport, auth) {
   "use strict";
 
   app.get('/accounts', auth.requiresAdmin, function(req, res, next){
@@ -15,7 +14,7 @@ module.exports = function(app, sharedContext, passport, auth) {
       if(err) {
         next(err);
       } else {
-        res.render('account/list', buildPageContext(req,{accounts: accounts, sortOptions: sortOptions}, sharedContext));
+        res.render('account/list', buildPageContext(req,{accounts: accounts, sortOptions: sortOptions}));
       }
     });
   });
@@ -23,7 +22,7 @@ module.exports = function(app, sharedContext, passport, auth) {
   app.get('/login', function(req, res) {
     var url = req.query.url;
     var flash = req.flash();
-    res.render('account/login', buildPageContext(req, {flash: flash, url: url}, sharedContext));
+    res.render('account/login', buildPageContext(req, {flash: flash, url: url}));
   });
 
   app.post('/login', passport.authenticate('local', {failureRedirect: '/login', failureFlash: true, successFlash: 'Welcome!'}), function(req, res) {
@@ -44,7 +43,7 @@ module.exports = function(app, sharedContext, passport, auth) {
   });
 
   app.get('/profile', auth.requiresLogin, function(req, res) {
-    res.render('account/profile', buildPageContext(req, {user: req.user}, sharedContext));
+    res.render('account/profile', buildPageContext(req, {user: req.user}));
   });
 
   app.post('/profile', auth.requiresLogin, function(req, res) {
@@ -58,7 +57,7 @@ module.exports = function(app, sharedContext, passport, auth) {
     var newPass = req.body.newPass;
     var newPassR = req.body.newPassRepeat;
     var complete = function() {
-      res.render('account/profile', buildPageContext(req, {currentTab: "password", error: error, success: success, user: req.user}, sharedContext));
+      res.render('account/profile', buildPageContext(req, {currentTab: "password", error: error, success: success, user: req.user}));
     };
     req.user.comparePassword(oldPass, function(err, isMatch) {
       if(err) {
@@ -94,7 +93,7 @@ module.exports = function(app, sharedContext, passport, auth) {
       if(err) {
         next(err);
       }
-      return res.render('account/publicProfile', buildPageContext(req, {contributor: contributor}, sharedContext));
+      return res.render('account/publicProfile', buildPageContext(req, {contributor: contributor}));
     });
   });
 
@@ -114,7 +113,7 @@ module.exports = function(app, sharedContext, passport, auth) {
   });
 
   app.get('/account/signup', function(req, res){
-    res.render('account/signup', buildPageContext(req, sharedContext));
+    res.render('account/signup', buildPageContext(req));
   });
 
   app.post('/account/signup', function(req, res, next) {

@@ -35,6 +35,8 @@ SuggestionSchema.plugin(timestamps);
 mongoose.model('Suggestion', SuggestionSchema);
 
 module.exports = {
+  Name: 'Suggestion',
+  Schema: SuggestionSchema,
   Model: mongoose.model('Suggestion'),
   Methods: {
     listSuggestions: listSuggestions

@@ -58,6 +58,8 @@ var listEntriesInRadius = EntrySchema.methods.listEntriesInRadius = function (op
 
 
 module.exports = {
+  Name: 'Entry',
+  Schema: EntrySchema,
   Model: mongoose.model('Entry'),
   Methods: {
     listEntries: listEntries,

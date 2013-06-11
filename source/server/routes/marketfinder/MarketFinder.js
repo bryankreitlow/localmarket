@@ -2,10 +2,9 @@
 
 var Food = require('../../models/Food').Model;
 var listEntriesInRadius = require('../../models/Entry').Methods.listEntriesInRadius;
-var buildPageContext = require('../utils/ContextUtil').buildPageContext;
 var _ = require('underscore');
 
-module.exports = function (app, sharedContext, passport, auth) {
+module.exports = function (app, buildPageContext, passport, auth) {
   "use strict";
 
   app.get('/marketfinder', function (req, res, next) {
@@ -30,7 +29,7 @@ module.exports = function (app, sharedContext, passport, auth) {
           marketLocations.push({name: market.market.displayName, id: market._id, long: market.market.location[0], lat: market.market.location[1] });
         });
       }
-      res.render('marketfinder/marketfinder', buildPageContext(req,{location: location, entries: markets, marketLocations: JSON.stringify(marketLocations), currentRadius: radius}, sharedContext));
+      res.render('marketfinder/marketfinder', buildPageContext(req,{location: location, entries: markets, marketLocations: JSON.stringify(marketLocations), currentRadius: radius}));
     });
   });
 };

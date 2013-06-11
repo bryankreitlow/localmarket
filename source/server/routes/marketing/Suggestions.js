@@ -2,10 +2,9 @@
 
 var Suggestion = require('../../models/Suggestion').Model;
 var listSuggestions = require('../../models/Suggestion').Methods.listSuggestions;
-var buildPageContext = require('../utils/ContextUtil').buildPageContext;
 var _ = require('underscore');
 
-module.exports = function(app, sharedContext, passport, auth) {
+module.exports = function(app, buildPageContext, passport, auth) {
   "use strict";
 
   app.get('/suggestions', function(req, res, next){
@@ -18,7 +17,7 @@ module.exports = function(app, sharedContext, passport, auth) {
       if(err) {
         next(err);
       } else {
-        res.render('suggestions/list', buildPageContext(req, {suggestions: suggestions, user: req.user}, sharedContext));
+        res.render('suggestions/list', buildPageContext(req, {suggestions: suggestions, user: req.user}));
       }
     });
   });
@@ -37,7 +36,7 @@ module.exports = function(app, sharedContext, passport, auth) {
   });
 
   app.get('/suggestion', auth.requiresLogin, function(req, res) {
-    res.render('suggestions/addSuggestion', buildPageContext(req, {user: req.user}, sharedContext));
+    res.render('suggestions/addSuggestion', buildPageContext(req, {user: req.user}));
   });
 
 };

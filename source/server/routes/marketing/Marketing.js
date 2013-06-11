@@ -1,8 +1,6 @@
 /*jslint node:true, es5:true */
 
-var buildPageContext = require('../utils/ContextUtil').buildPageContext;
-
-module.exports = function(app, sharedContext) {
+module.exports = function(app, buildPageContext, passport, auth) {
   "use strict";
 
   app.get('/index', function(req, res) {
@@ -14,10 +12,10 @@ module.exports = function(app, sharedContext) {
   });
 
   app.get('/', function(req, res) {
-    res.render('index', buildPageContext(req, { page: 'home'}, sharedContext));
+    res.render('index', buildPageContext(req, { page: 'home'}));
   });
 
   app.get('/about', function(req, res){
-    res.render('about', buildPageContext(req, { page: 'about'}, sharedContext));
+    res.render('about', buildPageContext(req, { page: 'about'}));
   });
 };

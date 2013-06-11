@@ -2,7 +2,6 @@
 
 var path = require('path'),
     config = require('./util/Config'),
-    configExpress = require('./util/ExpressConfig'),
     dbconnect = require('./util/Mongo'),
     cluster = require('cluster'),
     reqLogger = require('./util/ReqLogger'),
@@ -55,14 +54,6 @@ var workerOnExit = function(code, signal) {
   }
 };
 
-// Initialize a shared viewContext
-var sharedContext = {
-  isProduction: config.isProduction(),
-  View: {
-    Title: 'Localmart 2013'
-  }
-};
-
 if (!debugEnv && cluster.isMaster) {
   logger.info("Cluster master started", LogCategory);
   var clusterSize = config.get(config.NodeClusterSize);
@@ -85,15 +76,8 @@ if (!debugEnv && cluster.isMaster) {
     if (result) {
       logger.info("Connection Successful to MongoDB Host", "Mongo");
       var app = express().http().io(),
-        buildPageContext = require('./routes/utils/ContextUtil').buildPageContext,
-        mapRoutes = require('./routes/map/map'),
-       // apiproxy = require('./routes/api/ApiProxy'),
-        accountRoutes = require('./routes/account/Accounts'),
-        marketfinderRoutes = require('./routes/marketfinder/MarketFinder'),
-        marketingRoutes = require('./routes/marketing/Marketing'),
-        entryRoutes = require('./routes/entries/Entries'),
-        suggestionRoutes = require('./routes/marketing/Suggestions'),
-        foodRoutes = require('./routes/food/foods');
+        routes = require('./routes'),
+        models = require('./models')();
 
       var serverPort = config.get(config.NodeServerPort);
 
@@ -107,17 +91,8 @@ if (!debugEnv && cluster.isMaster) {
       // Configure passport
       require('./util/Passport')(passport);
 
-      //Configure Server
-      configExpress(app, config, passport, sharedContext);
-
-      mapRoutes(app, sharedContext);
-      accountRoutes(app, sharedContext, passport, auth);
-      entryRoutes(app, sharedContext, passport, auth);
-//      apiproxy(app, sharedContext, passport, auth);
-      marketfinderRoutes(app, sharedContext, passport, auth);
-      suggestionRoutes(app, sharedContext, passport, auth);
-      foodRoutes(app, sharedContext, passport, auth);
-      marketingRoutes(app, sharedContext);
+      // Configure routes
+      routes(app, passport, auth);
 
       app.io.set('log level', 1);
       app.io.enable('browser client minification');  // send minified client
@@ -125,52 +100,6 @@ if (!debugEnv && cluster.isMaster) {
       app.io.enable('browser client gzip');          // gzip the file
       app.io.configure(function () {
         app.io.set('store', socketStore);
-      });
-
-      // log errors
-      app.use(function errorHandler(err, req, res, next) {
-        if(err instanceof NotFound) {
-          console.log('[Page Not Found] ' + req.originalUrl);
-          res.status(404).render('error/404', buildPageContext(req, sharedContext));
-        } else {
-          try {
-            logger.error("Node error:", LogCategory);
-            logger.error(err.stack, LogCategory);
-            logger.error("Request:", LogCategory);
-            logger.error(JSON.stringify(_.pick(req, "httpVersion", "method", "originalUrl", "body", "params", "headers"), undefined, "  "), LogCategory);
-            logger.error("Response:", LogCategory);
-            logger.error(JSON.stringify(_.pick(res, "statusCode", "body", "output", "_headers"), undefined, "  "), LogCategory);
-          }
-          catch (exception) {
-            // hope this doesn't happen very often...
-            console.log(exception);
-          }
-          console.log('[Internal Server Error] ' + req.originalUrl);
-          res.status(500).render('error/500', buildPageContext(req, { error: err.stack }, sharedContext));
-        }
-      });
-
-      // Development Settings
-      app.configure(config.ConfigDevelopment, function () {
-        app.use(express.errorHandler({
-          dumpExceptions: true,
-          showStack: true
-        }));
-      });
-
-      // Production Settings
-      app.configure(config.ConfigProduction, function () {
-        app.use(express.errorHandler());
-      });
-
-      //A Route for Creating a 500 Error (Useful to keep around)
-      app.get('/500', function(req, res){
-        throw new Error('This is a 500 Error');
-      });
-
-      //The 404 Route (ALWAYS Keep this as the last route)
-      app.get('/*', function(req, res){
-        throw new NotFound;
       });
 
       // Start server on listen port.
@@ -189,10 +118,4 @@ if (!debugEnv && cluster.isMaster) {
       process.exit(1);
     }
   });
-}
-
-function NotFound(msg){
-  this.name = 'NotFound';
-  Error.call(this, msg);
-  Error.captureStackTrace(this, arguments.callee);
 }

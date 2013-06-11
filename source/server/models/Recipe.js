@@ -40,5 +40,7 @@ RecipeSchema.plugin(timestamps);
 mongoose.model('Recipe', RecipeSchema);
 
 module.exports = {
+  Name: 'Recipe',
+  Schema: RecipeSchema,
   Model: mongoose.model('Recipe')
 };

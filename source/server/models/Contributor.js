@@ -197,6 +197,8 @@ var listContributors = ContributorSchema.methods.listContributors = function (op
 };
 
 module.exports = {
+  Name: 'Contributor',
+  Schema: ContributorSchema,
   Model: mongoose.model('Contributor'),
   Methods: {
     listContributors: listContributors

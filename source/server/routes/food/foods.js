@@ -2,12 +2,11 @@
 
 var Food = require('../../models/Food').Model;
 var listFoods = require('../../models/Food').Methods.listAll;
-var buildPageContext = require('../utils/ContextUtil').buildPageContext;
 var _ = require('underscore');
 
 var enums = Food.schema.path("type").enumValues;
 
-module.exports = function (app, sharedContext, passport, auth) {
+module.exports = function (app, buildPageContext, passport, auth) {
   "use strict";
 
   app.post('/food/add', auth.requiresModerator, function (req, res, next) {
@@ -21,12 +20,12 @@ module.exports = function (app, sharedContext, passport, auth) {
       } else {
         message = 'Food ' + food.name + ' added, thank you ' + req.user.name.first + '.';
       }
-      res.render('food/AddFood', buildPageContext(req, {user: req.user, message: message, foodTypes: enums}, sharedContext));
+      res.render('food/AddFood', buildPageContext(req, {user: req.user, message: message, foodTypes: enums}));
     });
   });
 
   app.get('/food/add', auth.requiresModerator, function (req, res) {
-    res.render('food/AddFood', buildPageContext(req, {user: req.user, foodTypes: enums}, sharedContext));
+    res.render('food/AddFood', buildPageContext(req, {user: req.user, foodTypes: enums}));
   });
 
   app.get('/foods', function (req, res, next) {
@@ -36,7 +35,7 @@ module.exports = function (app, sharedContext, passport, auth) {
       if(err) {
         next(err);
       } else {
-        res.render('food/ListFoods', buildPageContext(req,{foods: foods, sortOptions: sortOptions}, sharedContext));
+        res.render('food/ListFoods', buildPageContext(req,{foods: foods, sortOptions: sortOptions}));
       }
     });
   });

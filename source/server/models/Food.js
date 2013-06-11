@@ -32,6 +32,8 @@ FoodSchema.methods = {
 };
 
 module.exports = {
+  Name: 'Food',
+  Schema: FoodSchema,
   Model: Food,
   Methods: FoodSchema.methods
 };

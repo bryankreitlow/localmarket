@@ -63,6 +63,8 @@ MarketSchema.methods = {
 };
 
 module.exports = {
+  Name: 'Market',
+  Schema: MarketSchema,
   Model: Market,
   Methods: MarketSchema.methods
 };
