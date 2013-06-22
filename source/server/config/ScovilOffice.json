@@ -1,0 +1,12 @@
+{
+  "configuration": "development",
+
+  "node_server_port": 8080,
+  "node_cluster_size": 2,
+
+  "dbuser": "localmartmongodbuser",
+  "dbpassword": "75Nq8vbG20Tkga2PBf",
+  "dbhost": "dbh86.mongolab.com",
+  "dbport": 27867,
+  "dbtable": "localmart"
+}
