@@ -31,7 +31,20 @@ var EntrySchema = new mongoose.Schema({
   vendor: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Vendor'
-  }
+  },
+  _comments: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Comment'
+    }
+  ],
+  _ratings: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Rating',
+      index: true
+    }
+  ]
 });
 
 EntrySchema.plugin(timestamps);
