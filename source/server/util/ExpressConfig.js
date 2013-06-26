@@ -6,20 +6,15 @@ var express = require('express.io'),
   mongoStore = require('connect-mongo')(express),
   flash = require('connect-flash'),
   consolidate = require('consolidate'),
-  swig = require('swig');
+  xsrf = require('./middleware/xsrf'),
+  protectJSON = require('./middleware/protectJSON');
 
 module.exports = function (app, config, passport) {
+  //  protect JSON
+  app.use(protectJSON);
+
   app.set('showStackError', true);
-  // should be placed before express.static
-  app.use(express.compress({
-    filter: function (req, res) {
-      return (/json|text|javascript|css/).test(res.getHeader('Content-Type'));
-    },
-    level: 9
-  }));
-  app.use("/assets", express.static('../../static/assets'));
-  //Fav icon
-  app.use(express.favicon('../../static/favicon/favicon.ico', { maxAge: 2592000000 }));
+
   app.use(express.logger('dev'));
 
   // set views path, template engine and default layout
@@ -46,16 +41,8 @@ module.exports = function (app, config, passport) {
       })
     }));
 
-    // NOTE: Swig requires some extra setup
-    // This helps it know where to look for includes and parent templates
-    swig.init({
-      root: path.join(__dirname, '../views'),
-      cache: false,
-//      tags: {
-//        imgsrc:require('../swig/imgsrc.js')
-//      },
-      allowErrors: true // allows errors to be thrown and caught by express instead of suppressed by Swig
-    });
+    // XSRF Avoidance
+//    app.use(xsrf);
 
     // connect flash for flash messages
     app.use(flash());

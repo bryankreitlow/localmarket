@@ -33,10 +33,12 @@ var models = getModelPaths(__dirname);
 
 module.exports = function() {
   // Hook up the models contained in the subdirs within models
+  var modelsRegistered = [];
   _.forEach(models, function(model) {
     var ModelName = require(model).Name;
     var ModelSchema = require(model).Schema;
     mongoose.model(ModelName, ModelSchema);
-    logger.info('Registering ' + ModelName + ' Model', LogCategory);
+    modelsRegistered.push(ModelName);
   });
+  logger.info('Registered Models: ' + modelsRegistered.join(', '), LogCategory);
 };

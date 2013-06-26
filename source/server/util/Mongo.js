@@ -4,7 +4,7 @@
 var config = require('./Config');
 var logger = require("./Logger");
 var mongoose = require('mongoose');
-mongoose.set('debug', true);
+mongoose.set('debug', (process.env.NODE_ENV === "production") ? false : false);
 var LogCategory = "Mongo";
 
 var Mongo = {
@@ -14,14 +14,14 @@ var Mongo = {
     mongoose.connect(config.getMongoDBConnectionString());
     var db = self.db = mongoose.connection;
     db.on('error', function(error) {
-      console.log('db connect error');
+      logger.error('Database Connection Error', LogCategory);
       callback(error, null);
     });
     db.on('connected', function() {
       callback(true, db);
     });
     db.on('disconnected', function() {
-      console.log('Disconnected from the MongoDB database');
+      logger.warning('Disconnected from the MongoDB database', LogCategory);
     });
   }
 };

@@ -30,20 +30,34 @@ module.exports = function(app, buildPageContext, passport, auth) {
     if(req.body.rememberme) {
       req.session.cookie.maxAge = 30 * 24 * 60 * 60 * 1000;
     }
+    req.io.broadcast('event:userlogin', {
+      userId: req.user._id,
+      color: req.user.color,
+      name: req.user.name
+    });
     if(req.body.url) {
       res.redirect(req.body.url);
     } else {
-      res.redirect('/profile');
+      res.redirect('/dashboard');
     }
   });
 
   app.get('/logout', function(req, res) {
+    req.io.broadcast('event:userlogout', {
+      userId: req.user._id,
+      color: req.user.color,
+      name: req.user.name
+    });
     req.logout();
     res.redirect('/');
   });
 
   app.get('/profile', auth.requiresLogin, function(req, res) {
     res.render('account/profile', buildPageContext(req, {user: req.user}));
+  });
+
+  app.get('/dashboard', auth.requiresLogin, function(req, res) {
+    res.render('spa/index', buildPageContext(req, {user: req.user}));
   });
 
   app.post('/profile', auth.requiresLogin, function(req, res) {

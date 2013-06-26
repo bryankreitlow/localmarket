@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  {# title is also a block in case you need to add logic when rendering, see publicprofile #}
+  {% block title %}
+  <title>
+    {{ View.Title }}
+  </title>
+  {% endblock %}
+
+  {#
+  Viewport meta tags are needed to ensure scroll bar don't show up on
+  mobile devices.
+  #}
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="author" content="LocalMart">
+  <meta name="description" content="Eat local, Buy Local">
+  <meta name="keywords" content="local food">
+  {# If you've got custom head meta tags, you can specify them here #}
+  {% block meta %}{% endblock %}
+  <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.5.1/leaflet.css" />
+  <link href="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.2/css/bootstrap-combined.min.css" rel="stylesheet">
+  <link href="/assets/css/all-{% if isProduction %}min{% else %}dev{% endif %}.css?{{ CacheBusterString }}" rel="stylesheet">
+  <style type="text/css">
+    .navbar .brand { max-height: 40px; overflow: visible;padding-top: 0;padding-bottom: 0; }
+  </style>
+  {% block styles %}
+  {% endblock %}
+</head>
+<body>
+{# Header view default #}
+{% block header %}
+{% include "core/header.html" %}
+{% endblock %}
+
+{# Body content #}
+<div class="container-fluid">
+  {% block content %}
+  {% endblock %}
+
+  {# Footer view default #}
+  {% block footer %}
+  {% include "core/footer.html" %}
+  {% endblock %}
+</div>
+  <script type="text/javascript" src="http://code.jquery.com/jquery-1.8.2.js"></script>
+  <script type="text/javascript" src="/socket.io/socket.io.js"></script>
+  <script type="text/javascript" src="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.2/js/bootstrap.min.js"></script>
+  <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.0.7/angular.min.js"></script>
+  <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.0.7/angular-resource.js"></script>
+  <script type="text/javascript" src="http://cdn.leafletjs.com/leaflet-0.5.1/leaflet.js"></script>
+  <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/angular-strap/0.7.2/angular-strap.min.js"></script>
+  <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.4.4/underscore-min.js"></script>
+  <script src="/assets/js/build-{% if isProduction %}min{% else %}dev{% endif %}.js?{{ CacheBusterString }}"></script>
+  {# Page specific scripts can be included here #}
+  {% block scripts %}
+  {% endblock %}
+
+  {# Add Google Analytics if the Environment is Production #}
+  {% if isProduction %}
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-39552611-1']);
+    _gaq.push(['_trackPageview']);
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+  {% endif %}
+
+  {#
+  In IE7 debug builds, include Firebug Lite by default, because let's be
+  honest, if you're using IE7, you're debugging a problem.
+  #}
+  {% if debug %}
+  <!--[if (gte IE 6)&(lte IE 8)]>
+  <script type="text/javascript" src="https://getfirebug.com/firebug-lite.js"></script>
+  <![endif]-->
+  {% endif %}
+</body>
+</html>

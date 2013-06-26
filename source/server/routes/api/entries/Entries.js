@@ -1,10 +1,10 @@
 /*jslint node:true, es5:true */
 
-var Entry = require('../../models/Entry').Model;
-var geocode = require('../../util/Geocode').geocodeAddress;
-var Market = require('../../models/Market').Model;
-var Vendor = require('../../models/Vendor').Model;
-var listEntries = require('../../models/Entry').Methods.listEntries;
+var Entry = require('../../../models/Entry').Model;
+var geocode = require('../../../util/Geocode').geocodeAddress;
+var Market = require('../../../models/Market').Model;
+var Vendor = require('../../../models/Vendor').Model;
+var listEntries = require('../../../models/Entry').Methods.listEntries;
 var _ = require('underscore');
 
 var enums = Entry.schema.path("type").enumValues;
@@ -19,7 +19,7 @@ var getAddress = function(market) {
 module.exports = function(app, buildPageContext, passport, auth) {
   "use strict";
 
-  app.get('/entries', function(req, res, next){
+  app.get('/api/entries', function(req, res, next){
     var query = req.query;
     var sortOptions = _.pick(query, 'sort', 'order');
     listEntries(sortOptions, function(err, entries) {
@@ -31,7 +31,7 @@ module.exports = function(app, buildPageContext, passport, auth) {
     });
   });
 
-  app.get('/entry/add', auth.requiresLogin, function (req, res) {
+  app.get('/api/entry/add', auth.requiresLogin, function (req, res) {
     res.render('entry/AddEntry', buildPageContext(req, {user: req.user, entryTypes: enums}));
   });
 

@@ -1,0 +1,17 @@
+{% extends "core/spalayout.html" %}
+
+{% set View.Title = "LocalMart | User Dashboard" %}
+
+{% block scripts %}
+
+{% endblock %}
+
+{% block content %}
+<!-- Main hero unit for a primary marketing message or call to action -->
+<div class="row-fluid" style="padding-top: 20px;">
+  <h2>JavaScript Projects. Based on AngularJS's sample</h2>
+</div>
+<div ng-app="project">
+  <div ng-view></div>
+</div>
+{% endblock %}

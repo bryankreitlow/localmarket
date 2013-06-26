@@ -1,1 +1,11 @@
 node_modules/
+image-map.less
+image-map.json
+all-dev.css
+all-min.css
+build-dev.js
+build-min.js
+build-dev.map.js
+.idea
+templates-app.js
+templates-components.js

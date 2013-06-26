@@ -1,15 +1,16 @@
 /*jslint node:true, es5:true */
 
 var path = require('path'),
-    config = require('./util/Config'),
-    dbconnect = require('./util/Mongo'),
+    config = require('./source/server/util/Config'),
+    dbconnect = require('./source/server/util/Mongo'),
     cluster = require('cluster'),
-    reqLogger = require('./util/ReqLogger'),
-    logger = require('./util/Logger'),
+    reqLogger = require('./source/server/util/ReqLogger'),
+    logger = require('./source/server/util/Logger'),
     _ = require('underscore'),
     express = require('express.io'),
     passport = require('passport'),
-    auth = require('./util/middleware/authorization');
+    swig = require('swig'),
+    auth = require('./source/server/util/middleware/authorization');
 
 // Init store for shared sockets on clusters
 var socketStore = new (require('socket.io-clusterhub'));
@@ -75,9 +76,21 @@ if (!debugEnv && cluster.isMaster) {
     "use strict";
     if (result) {
       logger.info("Connection Successful to MongoDB Host", "Mongo");
-      var app = express().http().io(),
-        routes = require('./routes'),
-        models = require('./models')();
+      var app = express();
+        app.http();
+        app.io();
+
+      var routes = require('./source/server/routes'),
+        models = require('./source/server/models')();
+
+      // Configure Socket.io
+      app.io.configure('development', function () {
+        app.io.enable('browser client minification');  // send minified client
+        app.io.enable('browser client etag');          // apply etag caching logic based on version number
+        app.io.enable('browser client gzip');          // gzip the file
+        app.io.set('log level', 3);
+        app.io.set('store', socketStore);
+      });
 
       var serverPort = config.get(config.NodeServerPort);
 
@@ -89,18 +102,33 @@ if (!debugEnv && cluster.isMaster) {
       });
 
       // Configure passport
-      require('./util/Passport')(passport);
+      require('./source/server/util/Passport')(passport);
+
+      // NOTE: Swig requires some extra setup
+      // This helps it know where to look for includes and parent templates
+      swig.init({
+        root: __dirname + '/views',
+        cache: false,
+        tags: {
+          imgsrc:require('./source/server/swig/imgsrc.js')
+        },
+        allowErrors: false // allows errors to be thrown and caught by express instead of suppressed by Swig
+      });
+
+      // should be placed before express.static
+      app.use(express.compress({
+        filter: function (req, res) {
+          return (/json|text|javascript|css/).test(res.getHeader('Content-Type'));
+        },
+        level: 9
+      }));
+
+      app.use("/assets", express.static('./static/assets'));
+      //Fav icon
+      app.use(express.favicon('./static/favicon/favicon.ico', { maxAge: 2592000000 }));
 
       // Configure routes
       routes(app, passport, auth);
-
-      app.io.set('log level', 1);
-      app.io.enable('browser client minification');  // send minified client
-      app.io.enable('browser client etag');          // apply etag caching logic based on version number
-      app.io.enable('browser client gzip');          // gzip the file
-      app.io.configure(function () {
-        app.io.set('store', socketStore);
-      });
 
       // Start server on listen port.
       var workerId = debugEnv ? "debug" : cluster.worker.id;
