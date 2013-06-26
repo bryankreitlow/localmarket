@@ -5,7 +5,9 @@ all-dev.css
 all-min.css
 build-dev.js
 build-min.js
-build-dev.map.js
+build-dev.js.map
 .idea
 templates-app.js
 templates-components.js
+spa-concated.js
+spa-annotated.js

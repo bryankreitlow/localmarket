@@ -62,8 +62,8 @@ var gruntConfig = {
       tasks: ['restart']
     },
     html_js: {
-      files: [jsAssets, 'source/client/source/js/**/*.js'],
-      tasks: ['uglify', 'uglify-patch']
+      files: [jsAssets, 'source/client/source/js/**/*.js', '!source/client/source/js/build/spa-concated.js', '!source/client/source/js/build/spa-annotated.js'],
+      tasks: ['concat', 'ngmin', 'uglify', 'uglify-patch']
     },
     ng_templates: {
       files: ['source/client/source/js/**/*.tpl.html'],
@@ -119,6 +119,20 @@ var gruntConfig = {
     }
   },
 
+  concat: {
+    spaSources: {
+      src: ['source/client/source/js/app/**/*.js', 'source/client/source/js/components/**/*.js'],
+      dest: 'source/client/source/js/build/spa-concated.js'
+    }
+  },
+
+  ngmin: {
+    spaMinify: {
+      src: 'source/client/source/js/build/spa-concated.js',
+      dest: 'source/client/source/js/build/spa-annotated.js'
+    }
+  },
+
   uglify: {
     development: {
       options: {
@@ -127,7 +141,7 @@ var gruntConfig = {
         compress: false,
         beautify: true,
 
-        sourceMap: 'static/assets/js/build-dev.map.js',
+        sourceMap: 'static/assets/js/build-dev.js.map',
         sourceMapPrefix: 1,
         sourceMapRoot: 'file://'+process.cwd()+'/source',
         sourceMappingURL: '/js/build-dev.js.map'
@@ -209,14 +223,16 @@ module.exports = function(grunt) {
 
   // Load the plugins
   grunt.loadNpmTasks('grunt-contrib-watch');
+  grunt.loadNpmTasks('grunt-contrib-concat');
   grunt.loadNpmTasks('grunt-contrib-less');
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-nodemon');
   grunt.loadNpmTasks('grunt-concurrent');
   grunt.loadNpmTasks('grunt-html2js');
+  grunt.loadNpmTasks('grunt-ngmin');
 
   // Default task(s).
   grunt.registerTask('default', ['build-if-not-exist', 'concurrent']);
-  grunt.registerTask('build', ['image_mapper', 'less', 'html2js', 'uglify', 'uglify-patch']);
+  grunt.registerTask('build', ['image_mapper', 'less', 'html2js', 'concat', 'ngmin', 'uglify', 'uglify-patch']);
 
 };

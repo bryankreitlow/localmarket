@@ -1,4 +1,4 @@
-angular.module('project', ['restangular', 'templates-app', 'SocketIO', 'leaflet-directive', '$strap.directives']).
+var project = angular.module('project', ['restangular', 'templates-app', 'SocketIO', 'leaflet-directive', '$strap.directives']).
 
   config(function($routeProvider, RestangularProvider) {
     $routeProvider.

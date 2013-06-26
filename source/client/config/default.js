@@ -7,7 +7,6 @@ module.exports = {
     "source/client/source/js/vendor/restangular/restangular.js",
     "source/client/source/js/build/templates-app.js",
     "source/client/source/js/build/templates-components.js",
-    "source/client/source/js/components/**/*.js",
-    "source/client/source/js/app/**/*.js"
+    "source/client/source/js/build/spa-annotated.js"
   ]
 };

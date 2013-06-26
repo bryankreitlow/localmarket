@@ -24,4 +24,17 @@ Grunt is being used so be sure to do a global install of grunt-cli
 	$ sudo npm install -g grunt-cli
 
 From here you can initiate a watch process and build after doing npm install by typing grunt in the command line. The default is for development which includes sourcemapping and no minification. If you want to run it in production mode just type
+
     $ NODE_ENV=production grunt
+
+Production
+==========
+Use the watch and redeploy script
+
+First use forever to start the server
+
+    $ forever start server.js
+
+Now run the watch and redeploy process (this is of course after running npm install)
+
+    $ nohup sh watchandredeploy.sh &>logs/watchLog.log
