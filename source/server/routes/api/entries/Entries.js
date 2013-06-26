@@ -35,7 +35,7 @@ module.exports = function(app, buildPageContext, passport, auth) {
     res.render('entry/AddEntry', buildPageContext(req, {user: req.user, entryTypes: enums}));
   });
 
-  app.post('/entry/add', auth.requiresLogin, function(req, res, next){
+  app.post('/api/entry/add', auth.requiresLogin, function(req, res, next){
     var reqBody = req.body, type = reqBody.type;
     var message;
     var completed = function(err) {
@@ -106,7 +106,7 @@ module.exports = function(app, buildPageContext, passport, auth) {
     }
   });
 
-  app.get('/vendor/:id/add', auth.requiresLogin, function(req, res, next) {
+  app.get('/api/vendor/:id/add', auth.requiresLogin, function(req, res, next) {
       Entry.findById(req.params.id).populate('market').exec(function(err, entry) {
         if(err) {
           next(err);
@@ -122,7 +122,7 @@ module.exports = function(app, buildPageContext, passport, auth) {
       });
   });
 
-  app.post('/vendor/:id/add', auth.requiresLogin, function(req, res, next) {
+  app.post('/api/vendor/:id/add', auth.requiresLogin, function(req, res, next) {
     var reqBody = req.body;
     Entry.findById(req.params.id).populate('market').populate('market.vendors').exec(function(err, entry) {
       if(err) {
@@ -169,7 +169,7 @@ module.exports = function(app, buildPageContext, passport, auth) {
     });
   });
 
-  app.get('/market/:id', function(req, res, next) {
+  app.get('/api/market/:id', function(req, res, next) {
     Entry.findById(req.params.id).populate('market').populate('market._vendors', ["name"]).exec(function(err, entry) {
       if(err) {
         next(err);
@@ -194,7 +194,7 @@ module.exports = function(app, buildPageContext, passport, auth) {
     });
   });
 
-  app.get('/entry/:id', function(req, res, next) {
+  app.get('/api/entry/:id', function(req, res, next) {
     Entry.findById(req.params.id).select("title type").exec(function(err, entry) {
       if(err) {
         next(err);
