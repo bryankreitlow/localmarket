@@ -19,6 +19,12 @@ while [ 1 ]; do
         echo "Retrieving New Master Code"
         git pull origin master
 
+        # install npm modules
+        npm install
+
+        # build production assets
+        NODE_ENV=production grunt build
+
         # restart the forever process
         echo "Restarting forever process"
         forever restart server.js
