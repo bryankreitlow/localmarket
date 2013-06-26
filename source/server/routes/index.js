@@ -66,7 +66,6 @@ module.exports = function(app, passport, auth) {
 
     // Hook up the routes contained in the subdirs within routes
     _.forEach(routes, function(route) {
-      console.log(route);
       require(route)(app, buildPageContext, passport, auth);
     });
 
