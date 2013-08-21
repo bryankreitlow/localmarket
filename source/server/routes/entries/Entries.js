@@ -124,7 +124,7 @@ module.exports = function(app, buildPageContext, passport, auth) {
 
   app.post('/vendor/:id/add', auth.requiresLogin, function(req, res, next) {
     var reqBody = req.body;
-    Entry.findById(req.params.id).populate('market').populate('market.vendors').exec(function(err, entry) {
+    Entry.findById(req.params.id).populate('market').exec(function(err, entry) {
       if(err) {
         next(err);
       }
@@ -133,6 +133,7 @@ module.exports = function(app, buildPageContext, passport, auth) {
       } else if(entry && entry.type !== "Market") {
         next(new Error('A Vendor Can Only be Added to a Market'));
       } else {
+        console.dir(entry);
         var vendor = new Vendor({
           name: reqBody.name,
           displayName: reqBody.name,
@@ -170,7 +171,7 @@ module.exports = function(app, buildPageContext, passport, auth) {
   });
 
   app.get('/market/:id', function(req, res, next) {
-    Entry.findById(req.params.id).populate('market').populate('market._vendors', ["name"]).exec(function(err, entry) {
+    Entry.findById(req.params.id).populate('market').exec(function(err, entry) {
       if(err) {
         next(err);
       }
@@ -179,15 +180,23 @@ module.exports = function(app, buildPageContext, passport, auth) {
       } else if(entry && entry.type !== "Market") {
         next();
       } else {
-        Vendor.populate(entry.market,{
-          path: '_vendors',
-          select: 'displayName description'
+        console.log(entry.market._vendors);
+        Entry.populate(entry.market,{
+          path: '_vendors'
         }, function(err) {
           if(err) {
             next(err);
           } else {
-            var location = (entry.market.location[0]) ? entry.market.location : [null, null];
-            return res.render('entry/viewMarket', buildPageContext(req, {entry: entry, lat: location[1], long: location[0]}));
+            Vendor.populate(entry.market._vendors, {
+              path: 'vendor'
+            }, function(err) {
+              if(err) {
+                next(err);
+              } else {
+                var location = (entry.market.location[0]) ? entry.market.location : [null, null];
+                return res.render('entry/viewMarket', buildPageContext(req, {entry: entry, lat: location[1], long: location[0]}));
+              }
+            });
           }
         });
       }

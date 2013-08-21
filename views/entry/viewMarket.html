@@ -60,10 +60,10 @@
     <img src="/assets/images/marketbanner.png">
     <h2 style="margin-left: 50px;">{{entry.market.displayName}}</h2>
     <div class="span5">
-      {% for vendor in entry.market._vendors %}
+      {% for vendorEntry in entry.market._vendors %}
         {% if loop.first %}<a href="/vendor/{{ entry._id }}/add" class="btn btn-primary">Add New Vendor</a><dl class="dl-horizontal">{% endif %}
-          <dt><a href="/vendor/{{ vendor._id }}">{{ vendor.displayName }}</a></dt>
-          <dd>{{ vendor.description }}</dd>
+          <dt><a href="/vendor/{{ vendorEntry._id }}">{{ vendorEntry.vendor.displayName }}</a></dt>
+          <dd>{{ vendorEntry.vendor.description }}</dd>
         {% if loop.last %}</dl>{% endif %}
       {% else %}
       <p>No Vendors</p>

@@ -9,27 +9,33 @@ module.exports = function (app, buildPageContext, passport, auth) {
   "use strict";
 
   app.get('/vendor/:id', function (req, res, next) {
-    console.log('test');
     Entry.findById(req.params.id).populate('vendor').exec(function(err, entry) {
       if(err) {
         next(err);
       }
-      Market.populate(entry.vendor, {
-        path: '_markets',
-        select: 'displayName description'
+      Entry.populate(entry.vendor, {
+        path: '_markets'
       }, function(err) {
         if(err) {
           next(err);
         } else {
-          Food.populate(entry.vendor, {
-            path: '_foods',
-            select: 'name type'
+          Entry.populate(entry.vendor._markets, {
+            path: 'market'
           }, function(err) {
             if(err) {
               next(err);
             } else {
-              console.log(entry.vendor);
-              res.render('entry/viewVendor', buildPageContext(req, {entry: entry}));
+              Food.populate(entry.vendor, {
+                path: '_foods',
+                select: 'name type'
+              }, function(err) {
+                if(err) {
+                  next(err);
+                } else {
+                  console.dir(entry);
+                  res.render('entry/viewVendor', buildPageContext(req, {entry: entry}));
+                }
+              });
             }
           });
         }
