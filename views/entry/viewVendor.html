@@ -1,0 +1,41 @@
+{% extends "core/layout.html" %}
+
+{% block title %}
+<title>
+  LocalMart | Vendor {{entry.vendor.displayName}}
+</title>
+{% endblock %}
+
+{% block content %}
+<div class="row-fluid" style="padding-top: 20px;">
+  <div class="span10">
+    <h2 style="margin-left: 50px;">{{ entry.vendor.displayName }}</h2>
+    <div class="span5">
+      {% for market in entry.vendor._markets %}
+      {% if loop.first %}<dl>{% endif %}
+      <dt><a href="/market/{{ market._id }}">{{ market.displayName }}</a></dt>
+      <dd>{{ market.country }}</dd>
+      {% if loop.last %}</dl>{% endif %}
+      {% else %}
+      <p>No Markets</p>
+      <a href="/entry/add" class="btn btn-primary">Add a Market</a>
+      {% endfor %}
+    </div>
+    <div class="span5">
+      <h3>Vendor Foods</h3>
+      {% for food in entry.vendor._foodss %}
+      {% if loop.first %}<dl>{% endif %}
+      <dt>{{ food.name }}</dt>
+      <dd>{{ food.type }}</dd>
+      {% if loop.last %}</dl>{% endif %}
+      {% else %}
+      <p>No Foods</p>
+      <a href="/vendor/{{ entry.vendor._id }}/food" class="btn btn-primary">Add a Food</a>
+      {% endfor %}
+    </div>
+  </div>
+  <div class="span2">
+    //Other nearby markets
+  </div>
+</div>
+{% endblock %}

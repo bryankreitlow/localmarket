@@ -43,11 +43,13 @@ var sharedContext = {
 var buildPageContext = function(req, additions) {
   "use strict";
   var userName = false;
+  var firstName = false;
   if(req.user) {
     req.session.user = req.user;
     userName = req.user.fullName();
+    firstName = req.user.name.first;
   }
-  return _.extend({}, additions, {userName: userName}, sharedContext);
+  return _.extend({}, additions, {userName: userName, firstName: firstName}, sharedContext);
 };
 
 var routes = getRoutes(__dirname);

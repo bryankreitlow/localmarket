@@ -41,7 +41,7 @@ var VendorSchema = new mongoose.Schema({
   _markets: [
     {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'Market',
+      ref: 'Entry',
       index: true
     }
   ]

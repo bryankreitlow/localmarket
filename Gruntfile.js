@@ -54,7 +54,7 @@ var gruntConfig = {
       tasks: ['image_mapper', 'less', 'restart']
     },
     html_less: {
-      files: ['views/**/*.less'],
+      files: ['views/**/*.less', 'source/client/source/less/*.less'],
       tasks: ['less']
     },
     server_js: {

@@ -45,7 +45,7 @@ var MarketSchema = new mongoose.Schema({
   },
   _vendors: [{
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'Vendor',
+    ref: 'Entry',
     index: true
   }]
 });

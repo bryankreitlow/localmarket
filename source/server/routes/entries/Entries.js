@@ -140,25 +140,25 @@ module.exports = function(app, buildPageContext, passport, auth) {
           description: reqBody.description,
           phoneNumber: reqBody.phoneNumber,
           _markets: [
-            entry.market._id
+            entry._id
           ]
         });
         vendor.save(function(err) {
           if(err) {
             next(err);
           } else {
-            entry.market._vendors.push(vendor._id);
-            entry.market.save(function(err) {
+            var newentry = new Entry({ type: 'Vendor', _contributor: req.user._id, vendor: vendor._id });
+            newentry.save(function(err) {
               if(err) {
                 next(err);
               } else {
-                var newentry = new Entry({ type: 'Vendor', _contributor: req.user._id, vendor: vendor._id });
-                newentry.save(function(err) {
+                entry.market._vendors.push(newentry._id);
+                entry.market.save(function(err) {
                   if(err) {
                     next(err);
                   } else {
-                    var location = (entry && entry.market && entry.market.location[0]) ? entry.market.location : [null, null];
-                    return res.render('entry/addVendor', buildPageContext(req, {entry: entry, message: 'Vendor ' + vendor.displayName + ' Added.', lat: location[1], long: location[0]}));
+                  var location = (entry && entry.market && entry.market.location[0]) ? entry.market.location : [null, null];
+                  return res.render('entry/addVendor', buildPageContext(req, {entry: entry, message: 'Vendor ' + vendor.displayName + ' Added.', lat: location[1], long: location[0]}));
                   }
                 });
               }

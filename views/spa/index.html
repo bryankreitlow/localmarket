@@ -1,4 +1,4 @@
-{% extends "core/spalayout.html" %}
+{% extends "core/layout.html" %}
 
 {% set View.Title = "LocalMart | User Dashboard" %}
 
@@ -11,7 +11,9 @@
 <div class="row-fluid" style="padding-top: 20px;">
   <h2>JavaScript Projects. Based on AngularJS's sample</h2>
 </div>
-<div ng-app="project">
-  <div ng-view></div>
+<div class="row-fluid">
+  <div ng-app="project">
+    <div ng-view></div>
+  </div>
 </div>
 {% endblock %}

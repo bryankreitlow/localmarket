@@ -9,6 +9,33 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
+
+      <div class="btn-group pull-right {% if userName %}{% else %}dropdown{% endif %}">
+        <a class="btn dropdown-toggle btn-inverse" data-toggle="dropdown" href="#">
+          <i class="icon-user icon-white"></i> {% if userName %}{{ firstName }}{% else %}Sign In{% endif %}
+          <span class="caret"></span>
+        </a>
+        {% if userName %}
+        <ul class="dropdown-menu">
+          <li><a href="/profile">Profile</a></li>
+          <li><a href="/dashboard">Dashboard</a></li>
+          <li><a href="/logout">Sign Out</a></li>
+        </ul>
+        {% else %}
+        <div class="dropdown-menu" style="padding: 15px; ">
+          <form class="navbar-form pull-right" method="post" action="/login">
+            <input class="span2" name="email" type="text" placeholder="Email">
+            <input class="span2" name="password" type="password" placeholder="Password">
+            <div class="form-inline">
+              <input id="user_remember_me" style="float: left; margin-right: 10px;" type="checkbox" name="rememberme" value="true" />
+              <label class="string optional" style="color: #78a4e9;" for="user_remember_me"> Remember me</label>
+            </div>
+            <input class="btn btn-primary" style="clear: left; height: 32px; font-size: 13px;" type="submit" value="Sign In" />
+          </form>
+        </div>
+        {% endif %}
+      </div>
+
       <div class="nav-collapse collapse">
         <ul class="nav">
           <li><a href="/about">About</a></li>
@@ -21,26 +48,6 @@
               <li><a href="/plantingguide"><i class="icon-list-alt"></i> Planting Guide</a></li>
             </ul>
           </li>
-          {% if userName %}
-          <li><a href="/profile">Profile</a></li>
-          <li><a href="/logout">Logout</a></li>
-          {% else %}
-          <li class="divider-vertical"></li>
-          <li class="dropdown">
-            <a class="dropdown-toggle" href="#" data-toggle="dropdown">Sign In <strong class="caret"></strong></a>
-            <div class="dropdown-menu" style="padding: 15px; ">
-              <form class="navbar-form pull-right" method="post" action="/login">
-                <input class="span2" name="email" type="text" placeholder="Email">
-                <input class="span2" name="password" type="password" placeholder="Password">
-                <div class="form-inline">
-                  <input id="user_remember_me" style="float: left; margin-right: 10px;" type="checkbox" name="rememberme" value="true" />
-                  <label class="string optional" style="color: #78a4e9;" for="user_remember_me"> Remember me</label>
-                </div>
-                <input class="btn btn-primary" style="clear: left; height: 32px; font-size: 13px;" type="submit" value="Sign In" />
-              </form>
-            </div>
-          </li>
-          {% endif %}
         </ul>
       </div>
     </div>
