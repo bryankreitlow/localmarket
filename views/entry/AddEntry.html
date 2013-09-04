@@ -10,6 +10,14 @@
   }
 %}
 
+{% block scripts %}
+<script type="text/javascript">
+  $(document).ready(function() {
+    $('.datepicker').datepicker();
+  });
+</script>
+{% endblock %}
+
 {% block content %}
 <div class="row-fluid" style="padding-top: 20px;">
   <div class="span6 offset2 messages">

@@ -25,6 +25,8 @@ mobile devices.
   {% block meta %}{% endblock %}
 <link href="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.2/css/bootstrap-combined.min.css" rel="stylesheet">
 <link href="/assets/css/all-{% if isProduction %}min{% else %}dev{% endif %}.css?{{ CacheBusterString }}" rel="stylesheet">
+<link href="/assets/css/datepicker.css" rel="stylesheet">
+
 <style type="text/css">
 .navbar .brand { max-height: 40px; overflow: visible;padding-top: 0;padding-bottom: 0; }
 </style>
@@ -56,6 +58,7 @@ mobile devices.
   <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/angular-strap/0.7.2/angular-strap.min.js"></script>
   <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.4.4/underscore-min.js"></script>
   <script src="/assets/js/build-{% if isProduction %}min{% else %}dev{% endif %}.js?{{ CacheBusterString }}"></script>
+  <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.2.0/js/bootstrap-datepicker.min.js"></script>
 {# Page specific scripts can be included here #}
   {% block scripts %}
   {% endblock %}

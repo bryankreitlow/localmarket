@@ -43,6 +43,19 @@ var MarketSchema = new mongoose.Schema({
     type: [Number],
     index: '2d'
   },
+  seasonStart: {
+    type: Date,
+    required: true
+  },
+  seasonEnd: {
+    type: Date,
+    required: true
+  },
+  _daysOfWeek: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Schedule',
+    index: true
+  }],
   _vendors: [{
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Entry',
