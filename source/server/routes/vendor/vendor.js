@@ -32,7 +32,6 @@ module.exports = function (app, buildPageContext, passport, auth) {
                 if(err) {
                   next(err);
                 } else {
-                  console.dir(entry);
                   res.render('entry/viewVendor', buildPageContext(req, {entry: entry}));
                 }
               });

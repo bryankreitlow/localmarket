@@ -30,7 +30,7 @@ var ContributorSchema = new mongoose.Schema({
   color: {
     type: String
   },
-  loginAttempts: { type: Number, required: true, default: 0 }, //store consecutive login failures
+  loginAttempts: { type: Number, required: true, 'default': 0 }, //store consecutive login failures
   lockUntil: { type: Number }, // store a lock timestamp if too many failures
   name: {
     first: String,

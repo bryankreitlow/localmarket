@@ -133,7 +133,6 @@ module.exports = function(app, buildPageContext, passport, auth) {
       } else if(entry && entry.type !== "Market") {
         next(new Error('A Vendor Can Only be Added to a Market'));
       } else {
-        console.dir(entry);
         var vendor = new Vendor({
           name: reqBody.name,
           displayName: reqBody.name,
@@ -180,7 +179,6 @@ module.exports = function(app, buildPageContext, passport, auth) {
       } else if(entry && entry.type !== "Market") {
         next();
       } else {
-        console.log(entry.market._vendors);
         Entry.populate(entry.market,{
           path: '_vendors'
         }, function(err) {
