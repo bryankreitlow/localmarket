@@ -48,17 +48,21 @@ module.exports = function(app, buildPageContext, passport, auth) {
     };
     switch(type) {
       case "Market":
-        var market = new Market({
-          name: reqBody.name,
-          displayName: reqBody.name,
-          website: reqBody.website,
-          addressLine1: reqBody.addressLine1,
-          addressLine2: reqBody.addressLine2,
-          city: reqBody.city,
-          region: reqBody.region,
-          postalCode: reqBody.postalCode,
-          country: reqBody.country
-        });
+        var market = new Market(reqBody);
+        market.displayName = reqBody.name;
+        // var market = new Market({
+        //   name: reqBody.name,
+        //   displayName: reqBody.name,
+        //   website: reqBody.website,
+        //   addressLine1: reqBody.addressLine1,
+        //   addressLine2: reqBody.addressLine2,
+        //   city: reqBody.city,
+        //   region: reqBody.region,
+        //   postalCode: reqBody.postalCode,
+        //   country: reqBody.country,
+        //   seasonStart: reqBody.seasonStart,
+        //   seasonEnd: reqBody.seasonEnd
+        // });
         geocode(getAddress(market), function(err, body) {
           if(err) { //If error geocoding continue
             console.log('Error Geocoding Address: ' + getAddress(market));

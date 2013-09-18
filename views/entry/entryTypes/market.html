@@ -301,16 +301,30 @@
 <option value="ZW">Zimbabwe</option>
 </select>
 </div>
+</div>
+
 
 <!-- Season Start Date-->
-<div class="input-append date" data-date="12-02-2012" data-date-format="dd-mm-yyyy">
-  <input id ="seasonStart" class="datepicker span2" size="16" type="text" value="12-02-2012">
+<div class="control-group">
+  <label class="control-label">Season Start</label>
+  <div class="controls">
+<div class="input-append date datepicker" data-date-format="mm/dd/yyyy">
+    <input id ="seasonStart" name="seasonStart" size="16" type="text"><span class="add-on"><i class="icon-th"></i></span>
 </div>
+</div>
+</div>
+
 <!-- Season End Date-->
-<div class="input-append date" data-date="12-02-2012" data-date-format="dd-mm-yyyy">
-  <input id ="seasonEnd" class="datepicker span2" size="16" type="text" value="12-02-2012">
+<div class="control-group">
+  <label class="control-label">Season End</label>
+  <div class="controls">
+<div class="input-append date datepicker" data-date-format="mm/dd/yyyy">
+    <input id ="seasonEnd" name="seasonEnd" size="16" type="text" value="12/02/2012"><span class="add-on"><i class="icon-th"></i></span>
 </div>
 </div>
+</div>
+
+
 <div class="controls-row create-row">
   <button class="span4 btn-create btn btn-large btn-primary" type="submit">Add Market</button>
 </div>

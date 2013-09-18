@@ -14,6 +14,10 @@
 <script type="text/javascript">
   $(document).ready(function() {
     $('.datepicker').datepicker();
+    var today = new Date();
+    $('#seasonStart').val((today.getMonth()+1) +"/" +today.getDate() + "/"+ today.getFullYear());
+    today.setDate(today.getDate() + 30);
+    $('#seasonEnd').val((today.getMonth()+1) +"/" +today.getDate() + "/"+ today.getFullYear());
   });
 </script>
 {% endblock %}
