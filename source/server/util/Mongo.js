@@ -14,6 +14,7 @@ var Mongo = {
     mongoose.connect(config.getMongoDBConnectionString());
     var db = self.db = mongoose.connection;
     db.on('error', function(error) {
+      console.log(error);
       logger.error('Database Connection Error', LogCategory);
       callback(error, null);
     });

@@ -2,20 +2,38 @@
 
 {% set View.Title = "LocalMart | Entries List" %}
 
+{% block scripts %}
+<script type="text/javascript">
+  $(document).ready(function() {
+    var container = document.querySelector('#container');
+    var msnry = new Masonry(container, {
+      itemSelector: '.item',
+      columnWidth: 120
+    });
+  });
+</script>
+{% endblock %}
+
 {% block content %}
 <div class="row-fluid" style="padding-top: 20px;">
   {% for entry in entries %}
-    <p>{{entry.type}}
-      {% if entry.type == "Recipe" %}
-        - <a href="/recipe/{{entry._id}}">Link</a>
-      {% else if entry.type == "Market" %}
-        - <a href="/market/{{entry._id}}">Link</a>
-      {% else if entry.type == "Vendor" %}
-      - <a href="/vendor/{{entry._id}}">Link</a>
-      {% else if entry.type == "Event" %}
-        - <a href="/event/{{entry._id}}">Link</a>
-      {% endif %}
-    </p>
+    {% if loop.first %}
+    <div id="container">
+    {% endif %}
+      <div class="item">
+          {% if entry.type == "Recipe" %}
+          <a href="/recipe/{{entry._id}}" style="color: #0000ff;"><p style="text-align: center; width: 110px; font-size: 28px; padding-top: 20px; border-bottom: 10px solid white;">{{ entry.type }}</p></a>
+          {% else if entry.type == "Market" %}
+          <a href="/market/{{entry._id}}" style="color: darkgreen;"><p style="text-align: center; width: 110px; font-size: 28px; padding-top: 20px; border-bottom: 10px solid white;">{{ entry.type }}</p></a>
+          {% else if entry.type == "Vendor" %}
+          <a href="/vendor/{{entry._id}}" style="color: darkgoldenrod;"><p style="text-align: center; width: 110px; font-size: 28px; padding-top: 20px; border-bottom: 10px solid white;">{{ entry.type }}</p></a>
+          {% else if entry.type == "Event" %}
+          <a href="/event/{{entry._id}}" style="color: darkorange;"><p style="text-align: center; width: 110px; font-size: 28px; padding-top: 20px; border-bottom: 10px solid white;">{{ entry.type }}</p></a>
+          {% endif %}
+      </div>
+    {% if loop.last %}
+      </div>
+    {% endif %}
   {% else %}
   <h2>No Entries</h2>
   {% endfor %}
